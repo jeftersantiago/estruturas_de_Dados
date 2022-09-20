@@ -1,7 +1,8 @@
+#include "pokedex.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "pokedex.h"
 
 struct STATUS {
     int hp;
@@ -61,6 +62,23 @@ Attack *newAttack(const char *name, const int powerBase, const float accuracy, c
 Attack *getAttack(const Pokemon *pokemon, int index){
     return pokemon->attacks[index];
 }
+Status *getStatus(const Pokemon *pokemon){
+    return pokemon->status;
+}
+
+void removePokemons(Pokemon **pokemon, const int amount){
+    for(int i = 0; i < amount; i++){
+        free(getStatus(pokemon[i]));
+        for(int j = 0; j < 4; j++){
+            if(getAttack(pokemon[i], j) != NULL){
+                free(getAttack(pokemon[i], j));
+            }
+        }
+        free(pokemon[i]);
+    }
+    free(pokemon);
+}
+
 void addAttack(Pokemon *pokemon, Attack *attack, int index){
     pokemon->attacks[index] = attack;
 }

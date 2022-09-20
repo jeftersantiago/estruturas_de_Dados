@@ -15,7 +15,7 @@ valgrind:
 	valgrind --tool=memcheck --leak-check=full  --track-origins=yes --show-leak-kinds=all --show-reachable=yes ./$(BINARY)
 
 zip:
-	zip pokedex.zip main.c pokedex.c pokedex.h
+	zip pokedex.zip main.c pokedex.c pokedex.h Makefile
 
 clean:
 	@rm *.o

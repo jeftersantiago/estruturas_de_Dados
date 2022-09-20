@@ -28,7 +28,6 @@ int main(){
 
     int option = -1;
 
-    int i = 0; // nao
     int key = 0;
     int indexPokemon;
     int indexAttack;
@@ -86,9 +85,7 @@ int main(){
             printAttack(getAttack(pokemon[indexPokemon],indexAttack));
             printf("\n");
         }
-        i++;
     }
-    free(nAttack);
-    free(pokemon);
+    removePokemons(pokemon, key);
     return 0;
 }
