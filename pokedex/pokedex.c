@@ -3,31 +3,6 @@
 #include <stdlib.h>
 #include "pokedex.h"
 
-struct STATUS {
-    int hp;
-    int attack;
-    int deffense;
-    int specialAttack;
-    int specialDeffense;
-    int speed;
-};
-
-struct ATTACK {
-    char name[20];
-    int powerBase;
-    float accuracy;
-    // 's' for special, 'p' for physical
-    char class;
-};
-
-struct POKEMON {
-    char name[50];
-    char type1[20];
-    char type2[20];
-    Status *status;
-    Attack *attacks[4];
-};
-
 Status *newStatus(const int hp, const int attack, const int deffense, const int specialAttack,
                    const int specialDeffense, const int speed){
     Status *status = (Status *) malloc(sizeof(Status));
@@ -77,5 +52,5 @@ void printAttack(Attack *attack){
     printf("Nome do Ataque: %s\n", attack->name);
     printf("Poder base: %d\n", attack->powerBase);
     printf("Acuracia: %f\n", attack->accuracy);
-    printf("Classe: %c\n\n", attack->class);
+    printf("Classe: %c\n", attack->class);
 }
