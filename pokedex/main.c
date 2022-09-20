@@ -1,4 +1,3 @@
-
 #include<stdio.h>
 #include<stdlib.h>
 #include "pokedex.h"
@@ -13,7 +12,7 @@ int main(){
     int deffense;
     int attack;
     int specialAttack;
-    int specialDeffense;
+    int specialDeffense; 
     int speed;
 
     // Ataque
@@ -23,7 +22,7 @@ int main(){
     int powerBase;
     float accuracy;
     char class;
-
+    
     int n_elements = 5;
     Pokemon **pokemon = (Pokemon **) malloc(n_elements * sizeof(Pokemon*));
 
@@ -31,8 +30,10 @@ int main(){
 
     int option = -1;
 
-    int i = 0;
+    int i = 0; // nao
     int key = 0;
+    int indexPokemon;
+    int indexAttack;
 
     while(option != 0){
 
@@ -74,6 +75,19 @@ int main(){
 
             nAttack = newAttack(nameAttack, powerBase, accuracy, class);
             addAttack(*(pokemon + pokPosition), nAttack, attackPosition);
+        }
+        // retorna info do pokemon
+        if (option == 3){
+            scanf("%d",&indexPokemon);
+            printPokemon(pokemon[indexPokemon]);
+            printf("\n");
+        }
+        // retorna info do ataque de um pokemon
+        if (option == 4){
+            scanf("%d",&indexPokemon);
+            scanf("%d",&indexAttack);
+            printAttack(getAttack(pokemon[indexPokemon],indexAttack));
+            printf("\n");
         }
         i++;
     }
