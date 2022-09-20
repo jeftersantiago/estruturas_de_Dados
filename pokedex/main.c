@@ -83,7 +83,7 @@ int main(){
         if (option == 4){
             scanf("%d",&indexPokemon);
             scanf("%d",&indexAttack);
-            printAttack(pokemon[indexPokemon]->attacks[indexAttack]);
+            printAttack(getAttack(pokemon[indexPokemon],indexAttack));
             printf("\n");
         }
         i++;
