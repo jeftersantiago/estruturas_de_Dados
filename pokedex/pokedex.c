@@ -28,6 +28,7 @@ struct POKEMON {
     Attack *attacks[4];
 };
 
+
 Status *newStatus(const int hp, const int attack, const int deffense, const int specialAttack,
                    const int specialDeffense, const int speed){
     Status *status = (Status *) malloc(sizeof(Status));
@@ -58,6 +59,9 @@ Attack *newAttack(const char *name, const int powerBase, const float accuracy, c
     attack->class = class;
     return attack;
 }
+Attack *getAttack(const Pokemon *pokemon, int index){
+    return pokemon->attacks[index];
+}
 void addAttack(Pokemon *pokemon, Attack *attack, int index){
     pokemon->attacks[index] = attack;
 }
@@ -77,5 +81,5 @@ void printAttack(Attack *attack){
     printf("Nome do Ataque: %s\n", attack->name);
     printf("Poder base: %d\n", attack->powerBase);
     printf("Acuracia: %f\n", attack->accuracy);
-    printf("Classe: %c\n\n", attack->class);
+    printf("Classe: %c\n", attack->class);
 }
