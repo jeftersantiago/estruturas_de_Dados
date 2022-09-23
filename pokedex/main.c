@@ -53,7 +53,7 @@ int main(){
             scanf("%d\n", &specialDeffense);
             scanf("%d\n", &speed);
 
-            *(pokemon + key) = newPokemon(name, type1, type2, hp, attack,
+            pokemon[key] = newPokemon(name, type1, type2, hp, attack,
                                     deffense, specialAttack, specialDeffense, speed);
             key++;
         }
