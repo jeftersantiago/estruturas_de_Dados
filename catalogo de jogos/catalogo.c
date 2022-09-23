@@ -29,7 +29,7 @@ void findGamebyYear(GameList *game_list, int year){
 		}
 	}
 	if (find == 0){
-		printf("Nada Encontrado\n");
+		printf("Nada encontrado\n");
 	}
 }
 
@@ -42,6 +42,6 @@ void findGamebyDeveloper(GameList *game_list, char *Developer){
 		}
 	}
 	if (find == 0){
-		printf("Nada Encontrado\n");
+		printf("Nada encontrado\n");
 	}
 }
