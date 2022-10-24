@@ -1,4 +1,5 @@
 #include "bank_account.h"
+#include <string.h>
 
 typedef struct NODE Node;
 

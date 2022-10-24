@@ -1,4 +1,4 @@
-UTIL=bank_account.c big_number.c binary_tree.c
+UTIL=bank_account.c binary_tree.c cpf_linked_list.c
 MAIN=main.c
 BINARY=main
 

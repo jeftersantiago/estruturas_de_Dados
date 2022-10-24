@@ -36,6 +36,10 @@ void printAccount(const Account *account){
     printf("Saldo atual :: R$ %.2f\n", account->balance);
 }
 
+/**
+   Remove os caracteres especiais da string do CPF
+   e retorna pointer do tipo CPF.
+ **/
 static CPF *formatCPF (const char *c) {
     int n = 14;
 // 11 dígitos 

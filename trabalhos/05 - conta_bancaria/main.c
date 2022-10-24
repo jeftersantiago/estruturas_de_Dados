@@ -3,8 +3,8 @@
    João Lucas Vasconselos, nºUSP: 12557870
  **/
 
-#include "bank_account.h"
-//#include "binary_tree.h"
+#include "binary_tree.h"
+
 #include<string.h>
 #include<stdio.h>
 #include<stdlib.h>
@@ -14,36 +14,31 @@ char *readLine();
 
 int main(){
 
-//    b_tree *tree = createTree();
+    b_tree *tree = createTree();
 
-    char *c = readLine();
+    int n;
+    char *c = readLine(); //  scanf("%d", &n);
+    n = atoi(c);
+    printf("n = %d\n", n);
+    int i = 0;
+    while(i < n) { // !strcmp(c, "B") || !strcmp(c, "R")){
 
-    int i = 1;
-    while(i > 0) {// !strcmp(c, "B") || !strcmp(c, "R")){
-
+        c = readLine();
         c = strdup(c);
 
-        char *cpf = strsep(&c, ",");
-        char *name = strsep(&c, ",");
-        int age = atoi(strsep(&c, ","));
+        char *cpf = strsep(&c, ";");
+        char *name = strsep(&c, ";");
+        int age = atoi(strsep(&c, ";"));
         float balance = atof(c);
         Account *account = createAccount(name, cpf, age, balance);
-        printAccount(account);
 
-        i--;
+        insert(tree, account);
 
-//        insert_tree(tree, account);
-
-//        free(c);
-//        c = NULL;
-//        c = readLine();
+        i++;
     }
-   /**
-      if(strcmp(c, "B")){
-      scanf("%s", &c);
-      search(tree, c);
-      }
-   **/
+//    free(c);
+
+    traverse(tree, preorder_traversal);
     return 0;
 }
 
