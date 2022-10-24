@@ -15,6 +15,7 @@
 typedef struct ITEM Item;
 
 Item *createItem(int key, const char *name, float value);
+
 boolean deleteItem(Item **item);
 void printItem(const Item *item);
 int getItemKey(const Item *item);

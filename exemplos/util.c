@@ -1,16 +1,19 @@
 #include "util.h"
 
-struct ITEM  {
+struct ITEM{
     int key;
     char* name;
     float value;
 };
 
 Item *createItem(int key, const char *name, float value){
-    Item *item = (Item *) malloc(sizeof(Item));
+
+    Item* item = (Item *) malloc(sizeof(Item));
+
     item->name = NULL;
     if(item != NULL){
         item->key = key;
+        item->name = (char *) malloc(sizeof(char));
         strcpy(item->name, name);
         item->value = value;
         return item;
@@ -30,9 +33,9 @@ boolean deleteItem(Item **item){
 
 void printItem(const Item *item){
     if(item != NULL){
-        printf("Nome = %s\n");
-        printf("Chave = %d\n");
-        printf("Valor = %f\n");
+        printf("Nome = %s\n", item->name);
+        printf("Chave = %d\n", item->key);
+        printf("Valor = %f\n", item->value);
     }
 }
 
