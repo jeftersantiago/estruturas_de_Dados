@@ -44,27 +44,35 @@ static Node * create_node(Account *account){
    boolean side : Assumi que se side == true, então o lado
    é direito, e o contrario é esquerdo.
  **/
-static Node * insert_node(Node *parent, Account *account, boolean side){
+static Node * insert_node(Node *parent, Account *account, boolean side, CPF *cpf){
     if(parent != NULL){
-        parent->left = insert_node(parent->left, account, side);
-        parent->right = insert_node(parent->right, account, side);
 
-        if(side)
-            parent->right = create_node(account);
-        else
-            parent->left = create_node(account);
+        parent->left = insert_node(parent->left, account, side, cpf);
+        parent->right = insert_node(parent->right, account, side, cpf);
 
+        if(cpf == getCPF(parent->account)){
+            if(side){
+                parent->right = create_node(account);
+//                printAccount(parent->right->account);
+            }
+            else{
+                parent->left = create_node(account);
+//                printAccount(parent->left->account);
+            }
+        }
     }
     return parent;
 }
 
 void insert(b_tree  *tree, Account *account){
-    if(tree->parent == NULL)
+    if(tree->parent == NULL){
         tree->parent = create_node(account);
+//        printAccount(tree->parent->account);
+    }
     else
     {
         boolean side = compareCPF(tree->parent->account, account);
-        tree->parent = insert_node(tree->parent, account, side);
+        tree->parent = insert_node(tree->parent, account, side, getCPF(tree->parent->account));
     }
 }
 

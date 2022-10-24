@@ -32,13 +32,16 @@ int main(){
         float balance = atof(c);
         Account *account = createAccount(name, cpf, age, balance);
 
+        printAccount(account);
+
         insert(tree, account);
 
         i++;
     }
 //    free(c);
-
+    printf("Traverse\n");
     traverse(tree, preorder_traversal);
+//    traverse(tree, postorder_traversal);
     return 0;
 }
 
