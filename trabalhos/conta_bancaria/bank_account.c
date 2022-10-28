@@ -28,10 +28,13 @@ CPF *getCPF(Account *account) {
     return account->cpf;
 }
 
+char *getName(Account *account){
+  return account->name;
+}
 
 void printAccount(const Account *account){
-//    printf("Conta :: %s\n", account->name);
-    printCPF(account->cpf);
+    printf("Conta :: %s\n", account->name);
+    //    printCPF(account->cpf);
 //  printf("Idade :: %d\n", account->age);
 //  printf("Saldo atual :: R$ %.2f\n", account->balance);
 }

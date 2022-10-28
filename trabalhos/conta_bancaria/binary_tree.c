@@ -30,52 +30,57 @@ b_tree *createTree() {
 }
 
 static Node * create_node(Account *account){
-    Node * new = (Node *) malloc(sizeof(Node));
-    if(new != NULL){
-        new->account = account;
-        new->left = NULL;
-        new->right = NULL;
+    Node * newNode = (Node *) malloc(sizeof(Node));
+    if(newNode != NULL){
+        newNode->account = account;
+        newNode->left = NULL;
+        newNode->right = NULL;
     }
-    return new;
+    return newNode;
 }
 
 /**
    Parametros:
    boolean side : Assumi que se side == true, então o lado
-   é direito, e o contrario é esquerdo.
+   é direito.
  **/
 static Node * insert_node(Node *parent, Account *account, boolean side, CPF *cpf){
+
     if(parent != NULL){
 
-        parent->left = insert_node(parent->left, account, side, cpf);
-        parent->right = insert_node(parent->right, account, side, cpf);
+      parent->right = insert_node(parent->right, account, side, cpf);
+      parent->left = insert_node(parent->left, account, side, cpf);
 
-        if(cpf == getCPF(parent->account)){
-            if(side){
-                parent->right = create_node(account);
-//                printAccount(parent->right->account);
-            }
-            else{
-                parent->left = create_node(account);
-//                printAccount(parent->left->account);
-            }
-        }
+      if(cpf == getCPF(parent->account)){
+        //        if(side){
+          //          parent->right = create_node(account);
+          //        }
+          //        else{
+          parent->left = create_node(account);
+          //        }
+      }
     }
     return parent;
 }
 
 void insert(b_tree  *tree, Account *account){
-    if(tree->parent == NULL){
+    if(tree->parent == NULL)
         tree->parent = create_node(account);
-//        printAccount(tree->parent->account);
-    }
     else
     {
-        boolean side = compareCPF(tree->parent->account, account);
-        tree->parent = insert_node(tree->parent, account, side, getCPF(tree->parent->account));
+      boolean side = compareCPF(tree->parent->account, account);
+      if(side && tree->parent->right != NULL)
+        printAccount(tree->parent->right->account);
+      /**
+         if(tree->parent->right != NULL)
+         printAccount(tree->parent->right->account);
+         if(tree->parent->left != NULL)
+         printAccount(tree->parent->left->account);
+      **/
+
+      tree->parent = insert_node(tree->parent, account, side, getCPF(tree->parent->account));
     }
 }
-
 
 /**
    Example of use
@@ -115,23 +120,37 @@ static void postorder_traversal_recursive(Node *node){
     }
 }
 
+// Function to print binary tree in 2D
+// It does reverse inorder traversal
+// https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/
+static void print2DUtil(Node *parent, int space)
+{
+  int COUNT = 6;
+  // Base case
+  if (parent == NULL)
+    return;
 
+  // Increase distance between levels
+  space += COUNT;
 
+  // Process right child first
+  print2DUtil(parent->right, space);
 
+  // Print current node after space
+  // count
+  printf("\n");
+  for (int i = COUNT; i < space; i++)
+    printf(" ");
+  printf("%s\n", getName(parent->account));
 
+  // Process left child
+  print2DUtil(parent->left, space);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// Wrapper over print2DUtil()
+void print_b_tree(b_tree *tree)
+{
+    // Pass initial space count as 0
+    print2DUtil(tree->parent, 0);
+}
 

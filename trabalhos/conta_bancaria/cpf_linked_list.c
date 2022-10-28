@@ -76,9 +76,9 @@ static boolean is_empty(const CPF *list) {
     return (list->begin == NULL);
 }
 
-boolean compareCPF(Account *parent, Account *new){
+boolean compareCPF(Account *parent, Account *newNode){
     CPF *cpf_1 = getCPF(parent);
-    CPF *cpf_2 = getCPF(new);
+    CPF *cpf_2 = getCPF(newNode);
     if(cpf_1 != NULL && cpf_2 != NULL){
         Node *current_n1 = cpf_1->begin;
         Node *current_n2 = cpf_2->begin;

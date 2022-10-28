@@ -27,9 +27,11 @@ CPF *getCPF(Account *account);
     True se o valor numérico do CPF da raíz for maior
     que o do novo registro.
  **/
-boolean compareCPF(Account *parent, Account *new);
+boolean compareCPF(Account *parent, Account *newNode);
 
 /** Printa o CPF com a formatação original **/
 void printCPF(CPF *c);
+
+char *getName(Account *account);
 
 #endif

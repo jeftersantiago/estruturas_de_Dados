@@ -19,7 +19,6 @@ int main(){
     int n;
     char *c = readLine(); //  scanf("%d", &n);
     n = atoi(c);
-    printf("n = %d\n", n);
     int i = 0;
     while(i < n) { // !strcmp(c, "B") || !strcmp(c, "R")){
 
@@ -32,16 +31,15 @@ int main(){
         float balance = atof(c);
         Account *account = createAccount(name, cpf, age, balance);
 
-        printAccount(account);
-
         insert(tree, account);
 
         i++;
     }
 //    free(c);
     printf("Traverse\n");
-    traverse(tree, preorder_traversal);
-//    traverse(tree, postorder_traversal);
+    //    traverse(tree, preorder_traversal);
+
+    print_b_tree(tree);
     return 0;
 }
 
@@ -62,20 +60,3 @@ char *readLine() {
     string[index - 1] = '\0';
     return string;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
