@@ -8,24 +8,6 @@
 
 #include "big_number.h"
 
-char *readLine() {
-    char *string = NULL;
-    char currentInput;
-    int index = 0;
-    do {
-        currentInput = (char)getchar();
-        string = (char *) realloc(string, sizeof(char) * (index + 1));
-        string[index] = currentInput;
-        index++;
-        if(currentInput == '\r')
-        {
-            currentInput = (char)getchar();
-        }
-    } while((currentInput != '\n') && (currentInput != EOF));
-    string[index - 1] = '\0';
-    return string;
-}
-
 int main(){
 
     int N;
@@ -36,14 +18,11 @@ int main(){
     scanf("%d\n",&N);
 
     while(N--){
-        strcpy(s,readLine());
-        strcpy(n1,readLine());
-        strcpy(n2,readLine());
+        scanf("%s %s %s",s,n1,n2);
         a=newBigInt();
         b=newBigInt();
         stringtoBigInt(a,n1);
         stringtoBigInt(b,n2);
-
 
         printf("Resultado :: ");
 
