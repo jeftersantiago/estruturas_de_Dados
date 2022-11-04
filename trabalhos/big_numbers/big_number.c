@@ -62,7 +62,7 @@ bigInt *stringtoBigInt(bigInt *n,char *s){
         digit=(int)s[i]-(int)'0'; // transforma char em int
 
         if (i==0 && number==0 && digit==0 && n->size>0)
-            break;
+            break; //Casos com zero a esquerda
 
         number += (digit * pow( 10, (N-i-1) % (N_DIG) ) );
 
