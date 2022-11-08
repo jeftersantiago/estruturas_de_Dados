@@ -1,19 +1,24 @@
 #ifndef _big_number
 #define _big_number
 
-#include <stdlib.h>
-#include <stdio.h>
-
 #define true 1
 #define false 0
 #define boolean int
 
 typedef struct BIG_INT bigInt;
+typedef struct NODE Node;
 
-boolean compareBigInt(bigInt *n1, bigInt *n2);
+bigInt *newBigInt();
 
-void printBigInt(bigInt *b);
+bigInt *stringtoBigInt(bigInt *n,char *s);
 
-bigInt *newBigInt(char *c);
+bigInt *SumBigInt(bigInt *n1, bigInt *n2);
+
+void printBigInt(bigInt *list);
+
+boolean greaterBigInt(bigInt *n1, bigInt *n2);
+
+boolean equalBigInt(bigInt *n1, bigInt *n2);
+
 
 #endif

@@ -1,5 +1,4 @@
 #include "bank_account.h"
-
 static CPF *formatCPF (const char *c);
 
 struct ACCOUNT {
