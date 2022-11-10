@@ -40,12 +40,6 @@ bigInt *newBigInt() {
     return list;
 }
 
-/**
-   Fiz uma matemagica para funcionar, nao sei como deixar mais legivel
-   resumindo ele le a string de tras pra frente e quando fecha a qntd
-   de digitos por no ele insere
- **/
-
 bigInt *stringtoBigInt(bigInt *n,char *s){
     int N=strlen(s),number=0;
     int digit;
@@ -62,7 +56,7 @@ bigInt *stringtoBigInt(bigInt *n,char *s){
         digit=(int)s[i]-(int)'0'; // transforma char em int
 
         if (i==0 && number==0 && digit==0 && n->size>0)
-            break; //Casos com zero a esquerda
+            break;
 
         number += (digit * pow( 10, (N-i-1) % (N_DIG) ) );
 
@@ -117,10 +111,13 @@ static void recursivePrint(bigInt *n, Node *p){
 }
 
 boolean greaterBigInt(bigInt *n1, bigInt *n2){
+
     if(n1 == NULL || n2 == NULL)
         return false;
+    
     if(n1->signal!=n2->signal)
         return n1->signal>n2->signal;
+
     if(n1->size!=n2->size){
         if(n1->signal==1)
             return (n1->size > n2->size ? true:false);
@@ -185,7 +182,7 @@ bigInt *SumBigInt(bigInt *n1, bigInt *n2){
     Node *current_n1 = n1->begin;
     Node *current_n2 = n2->begin;
 
-    while(current_n1!=NULL || current_n2!=NULL){
+    while(current_n1!=NULL || current_n2!=NULL || index!=0){
         insert(n3,index);
 
         if(current_n1!=NULL){
@@ -203,4 +200,3 @@ bigInt *SumBigInt(bigInt *n1, bigInt *n2){
 
     return n3;
 }
-
