@@ -20,5 +20,4 @@ boolean greaterBigInt(bigInt *n1, bigInt *n2);
 
 boolean equalBigInt(bigInt *n1, bigInt *n2);
 
-
 #endif

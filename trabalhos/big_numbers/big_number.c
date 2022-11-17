@@ -13,8 +13,6 @@ static int compareBigInt(bigInt *n1, bigInt *n2, Node *p1, Node *p2);
 static int compareNode(Node *p1, Node *p2);
 static void recursivePrint(bigInt *n, Node *p);
 
-char *build_cpf_string (bigInt *list);
-
 struct NODE {
     int number;
     Node *next;
@@ -24,6 +22,7 @@ struct BIG_INT {
     Node *begin;
     Node *end;
     int size;
+    int signal;
 };
 
 bigInt *newBigInt() {
@@ -35,6 +34,7 @@ bigInt *newBigInt() {
         list->begin = NULL;
         list->end = NULL;
         list->size = 0;
+        list->signal=1;
 
     }
     return list;
@@ -43,25 +43,27 @@ bigInt *newBigInt() {
 /**
    Fiz uma matemagica para funcionar, nao sei como deixar mais legivel
    resumindo ele le a string de tras pra frente e quando fecha a qntd
-   de digitos por no ele insere
+   de digitos por nó ele insere
  **/
 
 bigInt *stringtoBigInt(bigInt *n,char *s){
     int N=strlen(s),number=0;
-    char c[1];
+    int digit;
 
     for (int i=N-1;i>=0;i--){
 
-        c[0]=s[i];
-
-        if (i==0 && (strcmp(c,"0"))){
+        if (s[i]=='-'){
+            n->signal*=-1;
+            if (number>0)
+                insert(n,number);
             break;
         }
-        if (strcmp(c,"-")){
+        digit=(int)s[i]-(int)'0'; // transforma char em int
 
-        }
+        if (i==0 && number==0 && digit==0 && n->size>0)
+            break; //Casos com zero a esquerda
 
-        number+=(atoi(c)*pow(10,(N-i-1)%(N_DIG)));
+        number += (digit * pow( 10, (N-i-1) % (N_DIG) ) );
 
         if(((N-i-1)%(N_DIG)==N_DIG-1 || i==0)){
             insert(n,number);
@@ -101,59 +103,64 @@ void printBigInt(bigInt *list){
 }
 
 static void recursivePrint(bigInt *n, Node *p){
-    if(p==n->end)
+    if(p==n->end){
+        if (n->signal==-1)
+            printf("-");
         printf("%d",p->number);
+    }
     else{
         recursivePrint(n,p->next);
         printf("%.4d",p->number);
     }
 }
 
-char *build_cpf_string(bigInt *list){
-    if(list != NULL){
-        Node *node = list->begin;
-        char current[4];
-        char * string = malloc(sizeof(char));
-        while(node != NULL){
-
-            sprintf(current, "%02d", node->number);
-            printf("%s\n", current);
-
-            strcat(string, current);
-            node = node->next;
-
-        }
-        printf("%s\n", string);
-    }
-    return NULL;
-}
-
-/**
-   Retorna true se o número da lista n1 é maior que o da lista n2
-   Retorna false se não ou se os valores das listas for NULL.
- **/
 boolean greaterBigInt(bigInt *n1, bigInt *n2){
     if(n1 == NULL || n2 == NULL)
         return false;
-    if(n1->size!=n2->size)
-        return (n1->size>n2->size ? true:false);
+    if(n1->signal!=n2->signal)
+        return n1->signal>n2->signal;
+    if(n1->size!=n2->size){
+        if(n1->signal==1)
+            return (n1->size > n2->size ? true:false);
+        else
+            return (n1->size > n2->size ? false:true);
+    }
 
-    if(compareBigInt(n1,n2,n1->begin,n2->begin)==1)
-        return true;
+    if(compareBigInt(n1,n2,n1->begin,n2->begin)==1){
+        if(n1->signal==1)
+            return true;
+        else
+            return false;
+    }
 
     return false;
 }
 
+boolean equalBigInt(bigInt *n1, bigInt *n2){
+
+    if(is_empty(n1) && is_empty(n2))
+        return false;
+    if(n1->size!=n2->size || n1->signal!=n2->signal)
+        return false;
+
+    if(compareBigInt(n1,n2,n1->begin,n2->begin)==0)
+        return true;
+
+    return false; 
+}
+/**
+ * compara dois Big ints de tamanhos iguais, retorna 1, se n1>n2
+ * -1 se n1<n2 e 0 se n1 == n2
+**/
 static int compareBigInt(bigInt *n1, bigInt *n2, Node *p1, Node *p2){
     if(p1==n1->end)
         return compareNode(p1,p2);
 
     else{
-        int aux=compareBigInt(n1,n2,p1->next,p2->next);;
-        if (aux==1)
-            return 1;
-        if (aux==0)
-            return 0;
+        int aux=compareBigInt(n1,n2,p1->next,p2->next);
+
+        if (aux!=0)
+            return aux;
 
         return compareNode(p1,p2);
     }
@@ -163,23 +170,9 @@ static int compareNode(Node *p1, Node *p2){
     if(p1->number>p2->number)
         return 1;
     if(p1->number<p2->number)
-        return 0;
+        return -1;
     else
-        return 2;
-
-}
-
-boolean equalBigInt(bigInt *n1, bigInt *n2){
-
-    if(is_empty(n1) && is_empty(n2))
-        return false;
-    if(n1->size!=n2->size)
-        return false;
-
-    if(compareBigInt(n1,n2,n1->begin,n2->begin)==2)
-        return true;
-
-    return false;
+        return 0;
 }
 
 bigInt *SumBigInt(bigInt *n1, bigInt *n2){
@@ -200,10 +193,10 @@ bigInt *SumBigInt(bigInt *n1, bigInt *n2){
             n3->end->number+=current_n2->number;
             current_n2 = current_n2->next;
         }
-
         index=n3->end->number/MAX;
         n3->end->number=n3->end->number%MAX;
     }
 
     return n3;
 }
+
