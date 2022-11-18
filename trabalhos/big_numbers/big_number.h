@@ -10,7 +10,7 @@ typedef struct NODE Node;
 
 bigInt *newBigInt();
 
-bigInt *stringtoBigInt(bigInt *n,char *s);
+bigInt * createBigNumber(char *s);
 
 bigInt *SumBigInt(bigInt *n1, bigInt *n2);
 
@@ -19,5 +19,7 @@ void printBigInt(bigInt *list);
 boolean greaterBigInt(bigInt *n1, bigInt *n2);
 
 boolean equalBigInt(bigInt *n1, bigInt *n2);
+
+void delete_list(bigInt *list);
 
 #endif

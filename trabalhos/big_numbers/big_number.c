@@ -25,48 +25,66 @@ struct BIG_INT {
     int signal;
 };
 
-bigInt *newBigInt() {
 
-    bigInt *list = (bigInt *) malloc(sizeof(bigInt));
-
-    if(list != NULL) {
-
-        list->begin = NULL;
-        list->end = NULL;
-        list->size = 0;
-        list->signal=1;
-
-    }
-    return list;
+static void delete_node(Node * node){
+  Node *aux = NULL;
+  if(node != NULL)  {
+    aux = node->next;
+    free(node);
+    delete_node(aux);
+  }
 }
 
-bigInt *stringtoBigInt(bigInt *n,char *s){
-    int N=strlen(s),number=0;
-    int digit;
+void delete_list(bigInt *list){
+  Node * node = list->begin;
+  delete_node(node);
+  free(list);
+}
 
-    for (int i=N-1;i>=0;i--){
+bigInt *newBigInt() {
 
-        if (s[i]=='-'){
-            n->signal*=-1;
-            if (number>0)
-                insert(n,number);
-            break;
-        }
-        digit=(int)s[i]-(int)'0'; // transforma char em int
+    bigInt *n = (bigInt *) malloc(sizeof(bigInt));
 
-        if (i==0 && number==0 && digit==0 && n->size>0)
-            break;
+    if(n != NULL) {
 
-        number += (digit * pow( 10, (N-i-1) % (N_DIG) ) );
+        n->begin = NULL;
+        n->end = NULL;
+        n->size = 0;
+        n->signal=1;
 
-        if(((N-i-1)%(N_DIG)==N_DIG-1 || i==0)){
-            insert(n,number);
-            number=0;
-        }
     }
     return n;
 }
 
+bigInt *createBigNumber(char *s){
+
+  bigInt * n  = newBigInt(); // (bigInt *) malloc(sizeof(bigInt));
+
+  int N = strlen(s);
+  int number=0;
+  int digit;
+
+  for (int i=N-1;i>=0;i--){
+
+    if (s[i]=='-'){
+      n->signal*=-1;
+      if (number>0) insert(n,number);
+      break;
+    }
+    digit=(int)s[i]-(int)'0'; // transforma char em int
+
+    if (i==0 && number==0 && digit==0 && n->size>0)
+      break;
+
+    number += (digit * pow(10, (N-i-1) % (N_DIG)));
+    
+    if(((N-i-1)%(N_DIG)==N_DIG-1 || i==0)){
+      insert(n,number);
+      number=0;
+    }
+  }
+  return n;
+}
 
 static void insert(bigInt *list, int number){
 
@@ -84,6 +102,7 @@ static void insert(bigInt *list, int number){
         }
     }
 }
+
 
 static boolean is_empty(const bigInt *list) {
     return (list->begin == NULL);
@@ -129,7 +148,6 @@ boolean greaterBigInt(bigInt *n1, bigInt *n2){
         else
             return false;
     }
-
     return false;
 }
 
@@ -193,6 +211,5 @@ bigInt *SumBigInt(bigInt *n1, bigInt *n2){
         index=n3->end->number/MAX;
         n3->end->number=n3->end->number%MAX;
     }
-
     return n3;
 }
