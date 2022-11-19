@@ -17,6 +17,22 @@ struct BIG_NUMBER {
     int size;
 };
 
+static void delete_node(Node * node){
+  Node *aux = NULL;
+  if(node != NULL)  {
+    aux = node->next;
+    free(node);
+    delete_node(aux);
+  }
+}
+
+void deleteCPF(CPF *list){
+  Node * node = list->begin;
+  delete_node(node);
+  free(list);
+}
+
+
 CPF *newCPF(char *c) {
 
     CPF *list = (CPF *) malloc(sizeof(CPF));
@@ -41,34 +57,34 @@ CPF *newCPF(char *c) {
         insert(list, n);
 
         strncpy(tmp2, &c[9], sizeof(tmp2));
-        tmp2[2] = '\0';
+        tmp2[1] = '\0';
         n = atoi(strncpy(tmp2, &c[9], sizeof(tmp2)));
+
         insert(list, n);
     }
     free(c);
     return list;
 }
 
-
 static void insert(CPF *list, int number){
 
     if(list != NULL){
 
-        Node *node = (Node *) malloc(sizeof(Node));
+      Node *node = (Node *) malloc(sizeof(Node));
 
-        if(node != NULL) {
+      if(node != NULL) {
             
-            node->number = number;
-            node->next = NULL;
-
-            if(is_empty(list))
-                list->begin = node;
-            else
-                list->end->next = node;
-
-            list->end = node;
-            list->size++;
-        }
+        node->number = number;
+        node->next = NULL;
+          
+        if(is_empty(list))
+          list->begin = node;
+        else
+          list->end->next = node;
+        
+        list->end = node;
+        list->size++;
+      }
     }
 }
 
@@ -79,7 +95,9 @@ static boolean is_empty(const CPF *list) {
 boolean compareCPF(Account *parent, Account *newNode){
     CPF *cpf_1 = getCPF(parent);
     CPF *cpf_2 = getCPF(newNode);
+
     if(cpf_1 != NULL && cpf_2 != NULL){
+
         Node *current_n1 = cpf_1->begin;
         Node *current_n2 = cpf_2->begin;
 
@@ -103,5 +121,10 @@ void printCPF(CPF *cpf){
                cpf->begin->next->next->number,
                cpf->begin->next->next->next->number
             );
+}
+
+
+int getCPF_tests(CPF *cpf){
+  return cpf->begin->number;
 }
 

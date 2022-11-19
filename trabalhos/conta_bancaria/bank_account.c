@@ -2,25 +2,40 @@
 static CPF *formatCPF (const char *c);
 
 struct ACCOUNT {
-    char name[100];
+    char *name;
     CPF *cpf;
     int age;
     float balance;
 };
 
-Account *createAccount(const char *name, const char *cpf, const int age, const float balance) {
+Account *createAccount(char *str) {
 
     Account *account = (Account *) malloc(sizeof(Account));
-
+    
     if(account != NULL){
+
+      char * cpf = strsep(&str, ";");
+      char * name = strsep(&str, ";");
+      int age = atoi(strsep(&str, ";"));
+      float balance = atof(str);
         
-        strcpy(account->name, name);
-        account->cpf = formatCPF(cpf);
-        account->age = age;
-        account->balance = balance;
+      size_t length = strlen(name);
+      account->name = (char *) malloc(sizeof(char *) * (int) length);
+
+      strcpy(account->name, name);
+
+      account->cpf = formatCPF(cpf);
+      account->age = age;
+      account->balance = balance;
         
     }
     return account;
+}
+
+void deleteAccount (Account * account) {
+    deleteCPF(account->cpf);
+    free(account->name);
+    free(account);
 }
 
 CPF *getCPF(Account *account) {

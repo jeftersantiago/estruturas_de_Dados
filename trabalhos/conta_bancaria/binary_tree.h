@@ -18,6 +18,9 @@ void traverse(b_tree *tree, Traversal traversal);
 void preorder_traversal(b_tree *tree);
 void inorder_traversal(b_tree *tree);
 void postorder_traversal(b_tree *tree);
+
+
+void delete_tree(b_tree * tree);
 #endif
 
 

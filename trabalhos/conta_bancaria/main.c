@@ -17,29 +17,29 @@ int main(){
     b_tree *tree = createTree();
 
     int n;
-    char *c = readLine(); //  scanf("%d", &n);
-    n = atoi(c);
+    char *c = NULL;
+    scanf("%d\n", &n);
     int i = 0;
     while(i < n) { // !strcmp(c, "B") || !strcmp(c, "R")){
 
-        c = readLine();
-        c = strdup(c);
+      c = readLine();
+      printf("%s\n", c);
+      c = strdup(c);
 
-        char *cpf = strsep(&c, ";");
-        char *name = strsep(&c, ";");
-        int age = atoi(strsep(&c, ";"));
-        float balance = atof(c);
-        Account *account = createAccount(name, cpf, age, balance);
+      Account *account = createAccount(c);
+      insert(tree, account);
 
-        insert(tree, account);
-
-        i++;
+      free(c);
+      c = NULL;
+      i++;
     }
-//    free(c);
-    printf("Traverse\n");
-    //    traverse(tree, preorder_traversal);
 
+//    free(c);
+//    printf("Traverse\n");
+//    traverse(tree, preorder_traversal);
     print_b_tree(tree);
+
+    delete_tree(tree);
     return 0;
 }
 
