@@ -1,5 +1,4 @@
 #include "bank_account.h"
-static CPF *formatCPF (const char *c);
 
 struct ACCOUNT {
     char *name;
@@ -24,7 +23,7 @@ Account *createAccount(char *str) {
 
       strcpy(account->name, name);
 
-      account->cpf = formatCPF(cpf);
+      account->cpf = newCPF(cpf); // formatCPF(cpf);
       account->age = age;
       account->balance = balance;
         
@@ -51,26 +50,4 @@ void printAccount(const Account *account){
     //    printCPF(account->cpf);
 //  printf("Idade :: %d\n", account->age);
 //  printf("Saldo atual :: R$ %.2f\n", account->balance);
-}
-
-/**
-   Remove os caracteres especiais da string do CPF
-   e retorna pointer do tipo CPF.
- **/
-static CPF *formatCPF (const char *c) {
-    int n = 14;
-// 11 dígitos 
-    char *formated = (char *) malloc(sizeof(char) * n);
-
-    int j = 0;
-    int i = 0;
-
-    while(i < n){
-        if((c[i] != '.') && (c[i] != '-')){
-            formated[j] = c[i];
-            j++;
-        }
-        i++;
-    }
-    return newCPF(formated);
 }

@@ -17,25 +17,31 @@ typedef struct BIG_NUMBER CPF;
 Account *createAccount(char *str);
 void deleteAccount (Account * account);
 
+
 void printAccount(const Account *account);
 
 CPF *newCPF(char *c);
 CPF *getCPF(Account *account);
 void deleteCPF(CPF *list);
 
+typedef boolean (*Comparision) (int a, int b);
+
 /** Parametros:
     Account *parent : conta na raíz da árvore
     Account *new : novo registro
 
-    Retorna:
-    True se o valor numérico do CPF da raíz for maior
-    que o do novo registro.
  **/
-boolean compareCPF(Account *parent, Account *newNode);
+boolean equal (int a, int b);
+boolean greater(int a, int b);
+
+boolean compareCPF(CPF *cpf1, CPF * cpf2, Comparision cmp);
 
 /** Printa o CPF com a formatação original **/
 void printCPF(CPF *c);
+
 int getCPF_tests(CPF *c);
+
+boolean isEqual (const CPF * cpf1, const CPF * cpf2);
 
 char *getName(Account *account);
 

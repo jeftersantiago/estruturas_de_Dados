@@ -38,7 +38,6 @@ int main(){
 //    printf("Traverse\n");
 //    traverse(tree, preorder_traversal);
     print_b_tree(tree);
-
     delete_tree(tree);
     return 0;
 }

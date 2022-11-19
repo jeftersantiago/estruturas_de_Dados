@@ -17,7 +17,20 @@ struct BINARY_TREE {
     int height;
 };
 
-// void search(b_tree *tree, const char *key);
+static Account * search(Node * node, CPF * cpf){
+  if(node == NULL) return NULL;
+  if(compareCPF(cpf, getCPF(node->account), equal))
+    return node->account;
+  if(compareCPF(getCPF(node->account), cpf, greater))
+    return search(node->left, cpf);
+  else
+    return search(node->right, cpf);
+}
+
+Account * searchTree (b_tree * tree, char * key) {
+  CPF * cpf = newCPF(key);
+  return search(tree->parent, cpf);
+}
 
 b_tree *createTree() {
     b_tree *tree = (b_tree *) malloc(sizeof(b_tree));    
@@ -46,7 +59,8 @@ static Node * createNode(Account *account){
 static Node * insertNode(Node *parent, Account *account, CPF *cpf){
 
   boolean side = false;
-  if(parent != NULL) side = compareCPF(parent->account, account);
+  if(parent != NULL)
+    side = compareCPF(getCPF(parent->account), getCPF(account), greater);
 
   if(parent == NULL)
     parent = createNode(account);

@@ -1,10 +1,13 @@
 #include "bank_account.h"
 #include <string.h>
 
-typedef struct NODE Node;
+
 
 static boolean is_empty(const CPF *list); 
 static void insert(CPF *list, int number);
+
+
+typedef struct NODE Node;
 
 struct NODE {
     int number;
@@ -19,6 +22,7 @@ struct BIG_NUMBER {
 
 static void delete_node(Node * node){
   Node *aux = NULL;
+
   if(node != NULL)  {
     aux = node->next;
     free(node);
@@ -35,83 +39,77 @@ void deleteCPF(CPF *list){
 
 CPF *newCPF(char *c) {
 
-    CPF *list = (CPF *) malloc(sizeof(CPF));
+    CPF *cpf = (CPF *) malloc(sizeof(CPF));
 
-    if(list != NULL) {
+    if(cpf != NULL) {
 
-        list->begin = NULL;
-        list->end = NULL;
-        list->size = 0;
+        cpf->begin = NULL;
+        cpf->end = NULL;
+        cpf->size = 0;
 
-        char tmp[3];
-        char tmp2[2];
-        int n;
+        c = strdup(c);
 
-        n = atoi(strncpy(tmp, &c[0], sizeof(tmp)));
-        insert(list, n);
+        /* Divide os pedaços do cpf e insere lista ligada. */
+        insert(cpf, atoi(strsep(&c, ".")));
+        insert(cpf, atoi(strsep(&c, ".")));
+        insert(cpf, atoi(strsep(&c, "-")));
+        insert(cpf, atoi(c));
 
-        n = atoi(strncpy(tmp, &c[3], sizeof(tmp)));
-        insert(list, n);
-        
-        n = atoi(strncpy(tmp, &c[6], sizeof(tmp)));
-        insert(list, n);
-
-        strncpy(tmp2, &c[9], sizeof(tmp2));
-        tmp2[1] = '\0';
-        n = atoi(strncpy(tmp2, &c[9], sizeof(tmp2)));
-
-        insert(list, n);
     }
-    free(c);
-    return list;
+    return cpf;
 }
 
 static void insert(CPF *list, int number){
 
-    if(list != NULL){
+  if(list != NULL){
 
-      Node *node = (Node *) malloc(sizeof(Node));
+    Node *node = (Node *) malloc(sizeof(Node));
 
-      if(node != NULL) {
-            
-        node->number = number;
-        node->next = NULL;
-          
-        if(is_empty(list))
-          list->begin = node;
-        else
-          list->end->next = node;
-        
-        list->end = node;
-        list->size++;
-      }
+    if(node != NULL) {
+      node->number = number;
+      node->next = NULL;
+
+      if(is_empty(list))
+        list->begin = node;
+      else
+        list->end->next = node;
+
+      list->end = node;
+      list->size++;
     }
+  }
 }
 
 static boolean is_empty(const CPF *list) {
     return (list->begin == NULL);
 }
 
-boolean compareCPF(Account *parent, Account *newNode){
-    CPF *cpf_1 = getCPF(parent);
-    CPF *cpf_2 = getCPF(newNode);
+boolean compareCPF(CPF *cpf1, CPF * cpf2, Comparision cmp){
 
-    if(cpf_1 != NULL && cpf_2 != NULL){
+  if(cpf1 != NULL && cpf2 != NULL){
 
-        Node *current_n1 = cpf_1->begin;
-        Node *current_n2 = cpf_2->begin;
+    Node *current_n1 = cpf1->begin;
+    Node *current_n2 = cpf2->begin;
 
-        while(current_n1 != NULL && current_n2 != NULL){
-            if(current_n1->number > current_n2->number)
-                return true;
-            else return false;
- 
-            current_n1 = current_n1->next;
-            current_n2 = current_n2->next;
-        }
+    while(current_n1 != NULL && current_n2 != NULL){
+      if(cmp(current_n1->number, current_n2->number))
+        return true;
+      else return false;
+          
+      current_n1 = current_n1->next;
+      current_n2 = current_n2->next;
     }
-    return false;
+  }
+  return false;
 }
+
+boolean greater(int a, int b) {
+  return a > b;
+}
+boolean equal (int a, int b) {
+  return a == b;
+}
+
 
 void printCPF(CPF *cpf){
     if(cpf != NULL)
