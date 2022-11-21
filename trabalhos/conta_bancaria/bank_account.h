@@ -29,15 +29,19 @@ typedef boolean (*Comparision) (int a, int b);
 /** Parametros:
     Account *parent : conta na raíz da árvore
     Account *new : novo registro
-
+    Copmarision cmp : ponteiro de funcao para
+    qual funcao de comparacao quero usar.
+    
  **/
+boolean compareCPF(CPF *cpf1, CPF * cpf2, Comparision cmp);
+/* Retorna true se a > b  */
 boolean equal (int a, int b);
+/* Retorna true se a == b */
 boolean greater(int a, int b);
 
-boolean compareCPF(CPF *cpf1, CPF * cpf2, Comparision cmp);
-
 /** Printa o CPF com a formatação original **/
-void printCPF(CPF *c);
+void printCPF(CPF *cpf, int option);
+
 
 int getCPF_tests(CPF *c);
 

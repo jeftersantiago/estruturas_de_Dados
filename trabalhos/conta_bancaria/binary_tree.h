@@ -3,24 +3,25 @@
 
 #include "bank_account.h"
 
-typedef struct BINARY_TREE b_tree;
+typedef struct BINARY_TREE BTree;
+typedef struct NODE Node;
 
-typedef void (*Traversal) (b_tree *tree);
+typedef void (*Traversal) (Node *tree);
 
-b_tree *createTree();
+BTree *createTree();
 
-void print_b_tree(b_tree *tree);
+void print_b_tree(BTree *tree);
 
-void insert(b_tree  *tree, Account *account);
+void insert(BTree  *tree, Account *account);
+void removeFromTree(BTree *tree, char * cpf);
 
+Account * searchTree (BTree * tree, char * cpf);
 
-Account * searchTree (b_tree * tree, char * key);
+void traverse(BTree *tree, Traversal traversal);
 
-void traverse(b_tree *tree, Traversal traversal);
+void preorder_traversal(Node *node);
+void inorder_traversal(Node *node);
+void postorder_traversal(Node *node);
 
-void preorder_traversal(b_tree *tree);
-void inorder_traversal(b_tree *tree);
-void postorder_traversal(b_tree *tree);
-
-void delete_tree(b_tree * tree);
+void delete_tree(BTree * tree);
 #endif

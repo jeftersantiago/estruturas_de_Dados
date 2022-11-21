@@ -46,8 +46,8 @@ char *getName(Account *account){
 }
 
 void printAccount(const Account *account){
-    printf("Conta :: %s\n", account->name);
-    //    printCPF(account->cpf);
-//  printf("Idade :: %d\n", account->age);
-//  printf("Saldo atual :: R$ %.2f\n", account->balance);
+  printf("Conta :: %s\n", account->name);
+  printCPF(account->cpf, true);
+  printf("Idade :: %d\n", account->age);
+  printf("Saldo atual :: R$ %.2f\n", account->balance);
 }

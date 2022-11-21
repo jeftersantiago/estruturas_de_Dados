@@ -14,7 +14,7 @@ char *readLine();
 
 int main(){
 
-    b_tree *tree = createTree();
+    BTree *tree = createTree();
 
     int n;
     char *c = NULL;
@@ -34,10 +34,20 @@ int main(){
       i++;
     }
 
-//    free(c);
-//    printf("Traverse\n");
-//    traverse(tree, preorder_traversal);
+
     print_b_tree(tree);
+    printf("Preorder\n");
+    traverse(tree, preorder_traversal);
+
+    
+    char * key = "186.161.140-41";
+    removeFromTree (tree,key);
+    //    printAccount(removed);
+//    free(c);
+
+
+    print_b_tree(tree);
+
     delete_tree(tree);
     return 0;
 }

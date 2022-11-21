@@ -10,14 +10,15 @@ static void insert(CPF *list, int number);
 typedef struct NODE Node;
 
 struct NODE {
-    int number;
-    Node *next;
+  int number;
+  Node *next;
 };
 
 struct BIG_NUMBER {
-    Node *begin;
-    Node *end;
-    int size;
+  Node *begin;
+  Node *end;
+  
+  int size;
 };
 
 static void delete_node(Node * node){
@@ -86,18 +87,22 @@ static boolean is_empty(const CPF *list) {
 
 boolean compareCPF(CPF *cpf1, CPF * cpf2, Comparision cmp){
 
+  //  boolean ans = false;
   if(cpf1 != NULL && cpf2 != NULL){
 
     Node *current_n1 = cpf1->begin;
     Node *current_n2 = cpf2->begin;
-
+    
     while(current_n1 != NULL && current_n2 != NULL){
       if(cmp(current_n1->number, current_n2->number))
+        //        ans = true;
         return true;
       else return false;
-          
+      //      if(cmp == greater && ans)  return ans;
+
       current_n1 = current_n1->next;
       current_n2 = current_n2->next;
+      
     }
   }
   return false;
@@ -110,17 +115,24 @@ boolean equal (int a, int b) {
   return a == b;
 }
 
-
-void printCPF(CPF *cpf){
-    if(cpf != NULL)
-        printf("CPF :: %d.%d.%d-%02d\n",
-               cpf->begin->number,
-               cpf->begin->next->number,
-               cpf->begin->next->next->number,
-               cpf->begin->next->next->next->number
-            );
+void printCPF(CPF *cpf, boolean formated){
+  if(cpf != NULL){
+    if(formated)
+      printf("CPF :: %d.%d.%d-%02d\n",
+             cpf->begin->number,
+             cpf->begin->next->number,
+             cpf->begin->next->next->number,
+             cpf->begin->next->next->next->number
+             );
+    else 
+      printf("%d%d%d%02d\n",
+             cpf->begin->number,
+             cpf->begin->next->number,
+             cpf->begin->next->next->number,
+             cpf->begin->next->next->next->number
+             );
+  }
 }
-
 
 int getCPF_tests(CPF *cpf){
   return cpf->begin->number;

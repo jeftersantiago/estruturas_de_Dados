@@ -1,7 +1,6 @@
 #include "binary_tree.h"
 #include "bank_account.h"
 
-typedef struct NODE Node;
 
 static void preorder_traversal_recursive(Node *node);
 static void postorder_traversal_recursive(Node *node);
@@ -27,13 +26,65 @@ static Account * search(Node * node, CPF * cpf){
     return search(node->right, cpf);
 }
 
-Account * searchTree (b_tree * tree, char * key) {
+Account * searchTree (BTree * tree, char * key) {
   CPF * cpf = newCPF(key);
   return search(tree->parent, cpf);
 }
 
-b_tree *createTree() {
-    b_tree *tree = (b_tree *) malloc(sizeof(b_tree));    
+Account * swapMaxLeft (Node * swap, Node * parent, Node *prior) {
+  if(swap->right != NULL) {
+    swapMaxLeft(swap->right, parent, swap);
+    return NULL;
+  }
+  if(parent == prior)
+    prior->left = swap->left;
+  else
+    prior->right = swap->left;
+
+  Account *tmp = parent->account;
+
+  parent->account = swap->account;
+
+  free(swap);
+  swap = NULL;
+
+  return tmp;
+}
+
+static Account * removeNode (Node ** node, CPF * cpf){
+  Node * p;
+  if(*node == NULL) return NULL;
+
+  if(compareCPF(getCPF((*node)->account), cpf, equal)){
+    if((*node)->left == NULL || (*node)->right == NULL){
+      p = *node;
+      if((*node)->left == NULL)
+        *node = (*node)->right;
+      else
+        *node = (*node)->left;
+      free(p);
+      p = NULL;
+    }
+    /* Tem 2 nós filhos */
+    else
+      return swapMaxLeft ((*node)->left, *node, *node);
+  }
+  else {
+    if(compareCPF(getCPF((*node)->account), cpf, greater))
+       return removeNode(&(*node)->left, cpf);
+    else
+       return removeNode(&(*node)->right, cpf);
+  }
+  return NULL;
+}
+  
+void removeFromTree (BTree * tree, char * key) {
+  CPF * cpf = newCPF(key);
+  removeNode(&tree->parent, cpf);
+}
+
+BTree *createTree() {
+    BTree *tree = (BTree *) malloc(sizeof(BTree));    
     if(tree != NULL){
         tree->parent = NULL;
         tree->height = -1;
@@ -51,59 +102,57 @@ static Node * createNode(Account *account){
     return newNode;
 }
 
-/**
-   Parametros:
-   boolean side : Assumi que se side == true, então o lado
-   é direito.
- **/
-static Node * insertNode(Node *parent, Account *account, CPF *cpf){
-
-  boolean side = false;
-  if(parent != NULL)
-    side = compareCPF(getCPF(parent->account), getCPF(account), greater);
+static Node * insertNode(Node *parent, Account *account){
 
   if(parent == NULL)
     parent = createNode(account);
-  else if(side)
-    parent->right = insertNode(parent->right, account, cpf);
-  else if(!side)
-    parent->left = insertNode(parent->left, account, cpf);
+  else if(compareCPF(getCPF(account), getCPF(parent->account), greater)) 
+    parent->right = insertNode(parent->right, account);
+  else if (compareCPF(getCPF(parent->account), getCPF(account), greater)) 
+    parent->left = insertNode(parent->left, account);
+
   return parent;
 }
 
-void insert(b_tree  *tree, Account *account){
+void insert(BTree  *tree, Account *account){
   if(tree->parent == NULL)
     tree->parent = createNode(account);
   else
-    insertNode(tree->parent, account, getCPF(tree->parent->account));
+    insertNode(tree->parent, account);
 }
 
 /**
    Example of use
    traverse(tree, inorder_traversal)
  **/
-void traverse(b_tree *tree, Traversal traversal){
-    traversal(tree);
+void traverse(BTree *tree, Traversal traversal){
+    traversal(tree->parent);
 }
 
-void preorder_traversal(b_tree *tree){preorder_traversal_recursive(tree->parent);}
+void preorder_traversal(Node *node) {
+  preorder_traversal_recursive(node);
+}
 
-void inorder_traversal(b_tree *tree){inorder_traversal_recursive(tree->parent);}
+void inorder_traversal(Node *node) {
+  inorder_traversal_recursive(node);
+}
 
-void postorder_traversal(b_tree *tree){postorder_traversal_recursive(tree->parent);}
+void postorder_traversal(Node *node) {
+  postorder_traversal_recursive(node);
+}
 
 static void preorder_traversal_recursive(Node *node){
-    if(node != NULL){
-        printAccount(node->account);
-        preorder_traversal_recursive(node->left);
-        preorder_traversal_recursive(node->right);
-    }
+  if(node != NULL){
+    printCPF(getCPF(node->account), false);
+    preorder_traversal_recursive(node->left);
+    preorder_traversal_recursive(node->right);
+  }
 }
 
 static void inorder_traversal_recursive(Node *node){
     if(node != NULL){
         preorder_traversal_recursive(node->left);
-        printAccount(node->account);
+        printCPF(getCPF(node->account), false);
         preorder_traversal_recursive(node->right);
     }
 }
@@ -112,7 +161,7 @@ static void postorder_traversal_recursive(Node *node){
     if(node != NULL){
         preorder_traversal_recursive(node->left);
         preorder_traversal_recursive(node->right);
-        printAccount(node->account);
+        printCPF(getCPF(node->account), false);
     }
 }
 
@@ -132,7 +181,7 @@ static void delete_node(Node * node){
   }
 
 }
-void delete_tree(b_tree * tree){
+void delete_tree(BTree * tree){
   Node * parent = tree->parent;
   if(parent != NULL){
     delete_node(parent->left);
@@ -171,7 +220,7 @@ static void print2DUtil(Node *parent, int space){
 }
 
 // Wrapper over print2DUtil()
-void print_b_tree(b_tree *tree)
+void print_b_tree(BTree *tree)
 {
     // Pass initial space count as 0
     print2DUtil(tree->parent, 0);
