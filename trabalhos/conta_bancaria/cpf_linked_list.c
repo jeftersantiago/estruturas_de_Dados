@@ -87,7 +87,7 @@ static boolean is_empty(const CPF *list) {
 
 boolean compareCPF(CPF *cpf1, CPF * cpf2, Comparision cmp){
 
-  //  boolean ans = false;
+  boolean ans = false;
   if(cpf1 != NULL && cpf2 != NULL){
 
     Node *current_n1 = cpf1->begin;
@@ -95,10 +95,9 @@ boolean compareCPF(CPF *cpf1, CPF * cpf2, Comparision cmp){
     
     while(current_n1 != NULL && current_n2 != NULL){
       if(cmp(current_n1->number, current_n2->number))
-        //        ans = true;
-        return true;
-      else return false;
-      //      if(cmp == greater && ans)  return ans;
+        ans = true;
+
+      if(cmp == greater)  return ans;
 
       current_n1 = current_n1->next;
       current_n2 = current_n2->next;
