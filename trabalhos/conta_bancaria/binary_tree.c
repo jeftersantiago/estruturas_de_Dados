@@ -32,55 +32,69 @@ Account * searchTree (BTree * tree, char * key) {
 }
 
 Account * swapMaxLeft (Node * swap, Node * parent, Node *prior) {
-  if(swap->right != NULL) {
-    swapMaxLeft(swap->right, parent, swap);
-    return NULL;
-  }
+  if(swap->left != NULL)
+    return swapMaxLeft(swap->right, parent, swap);
   if(parent == prior)
     prior->left = swap->left;
   else
-    prior->right = swap->left;
-
-  Account *tmp = parent->account;
+    prior->right = swap->right;
 
   parent->account = swap->account;
-
   free(swap);
   swap = NULL;
-
-  return tmp;
+  return parent->account;
 }
 
-static Account * removeNode (Node ** node, CPF * cpf){
-  Node * p;
-  if(*node == NULL) return NULL;
 
-  if(compareCPF(getCPF((*node)->account), cpf, equal)){
-    if((*node)->left == NULL || (*node)->right == NULL){
-      p = *node;
-      if((*node)->left == NULL)
-        *node = (*node)->right;
-      else
-        *node = (*node)->left;
-      free(p);
-      p = NULL;
+void removeNode(Node **node, CPF * cpf) {
+  if(*node == NULL) return;
+
+  CPF * tmpCPF = getCPF((*node)->account);
+
+  if(compareCPF(tmpCPF, cpf, greater))
+    removeNode(&(*node)->left, cpf);
+  else if(compareCPF(cpf, tmpCPF, greater))
+    removeNode(&(*node)->right, cpf);
+
+  else{
+    /* Caso nó folha */
+    if((*node)->left == NULL && (*node)->right == NULL){
+      free(*node);
+      *node = NULL;
+      return;
     }
-    /* Tem 2 nós filhos */
-    else
-      return swapMaxLeft ((*node)->left, *node, *node);
+    /* So tem filho direito */
+    if((*node)->left == NULL){
+      Node * aux = *node;
+      *node = (*node)->right;
+      free(aux);
+      return;
+    }
+    /* So tem filho esquerdo*/
+    if((*node)->right == NULL){
+      Node * aux = *node;
+      *node = (*node)->left;
+      free(aux);
+      return;
+    }
+    /* Tem dois filhos
+       Escolhe o menor filho do ramo direito para substituir o no removido.
+     */
+    else {
+      Node * aux = (*node)->right; 
+      while(aux->left != NULL)
+        aux = aux->left;
+
+      (*node)->account = aux->account;
+      return removeNode(&(*node)->right, getCPF(aux->account));
+    }
   }
-  else {
-    if(compareCPF(getCPF((*node)->account), cpf, greater))
-       return removeNode(&(*node)->left, cpf);
-    else
-       return removeNode(&(*node)->right, cpf);
-  }
-  return NULL;
 }
   
 void removeFromTree (BTree * tree, char * key) {
   CPF * cpf = newCPF(key);
-  removeNode(&tree->parent, cpf);
+  removeNode(&(tree->parent), cpf);
+  deleteCPF(cpf);
 }
 
 BTree *createTree() {

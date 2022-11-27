@@ -34,20 +34,25 @@ int main(){
       i++;
     }
 
-
     print_b_tree(tree);
-    printf("Preorder\n");
-    traverse(tree, preorder_traversal);
 
+    // printf("Preorder\n");
+    //    traverse(tree, preorder_traversal);
+
+    //    print_b_tree(tree);
     
     char * key = "186.161.140-41";
-    removeFromTree (tree,key);
-    //    printAccount(removed);
-//    free(c);
+    //    printf("\nREMOVENDO 18616114041\n\n");
 
-
+    removeFromTree (tree, key);
     print_b_tree(tree);
 
+    printf("\nPreorder\n");
+    traverse(tree, preorder_traversal);
+
+
+    //    printAccount(removed);
+    //    free(c);
     delete_tree(tree);
     return 0;
 }

@@ -1,8 +1,6 @@
 #include "bank_account.h"
 #include <string.h>
 
-
-
 static boolean is_empty(const CPF *list); 
 static void insert(CPF *list, int number);
 
@@ -101,10 +99,9 @@ boolean compareCPF(CPF *cpf1, CPF * cpf2, Comparision cmp){
 
       current_n1 = current_n1->next;
       current_n2 = current_n2->next;
-      
     }
   }
-  return false;
+  return ans;
 }
 
 boolean greater(int a, int b) {
