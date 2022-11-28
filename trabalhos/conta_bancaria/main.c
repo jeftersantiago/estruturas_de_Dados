@@ -3,7 +3,7 @@
    João Lucas Vasconselos, nºUSP: 12557870
  **/
 
-#include "binary_tree.h"
+#include "binaryTree.h"
 
 #include<string.h>
 #include<stdio.h>
@@ -65,8 +65,9 @@ int main(){
       cpf = NULL;
 
       traverse(tree, preorder_traversal);
-
     }
+
+    printf("\n"); /* So pra fazer o output correto no runcodes*/
 
     delete_tree(tree);
     return 0;

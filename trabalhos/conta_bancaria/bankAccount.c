@@ -1,4 +1,4 @@
-#include "bank_account.h"
+#include "bankAccount.h"
 
 struct ACCOUNT {
     char *name;

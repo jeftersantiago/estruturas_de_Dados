@@ -1,7 +1,7 @@
 #ifndef _binary_tree
 #define _binary_tree
 
-#include "bank_account.h"
+#include "bankAccount.h"
 
 typedef struct BINARY_TREE BTree;
 typedef struct NODE Node;
