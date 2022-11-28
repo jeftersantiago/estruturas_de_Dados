@@ -1,4 +1,4 @@
-UTIL=bank_account.c binary_tree.c cpf_linked_list.c
+UTIL=bank_account.c binary_tree.c linked_list.c
 MAIN=main.c
 BINARY=main
 
@@ -15,7 +15,7 @@ valgrind:
 	valgrind --tool=memcheck --leak-check=full  --track-origins=yes --show-leak-kinds=all --show-reachable=yes ./$(BINARY)
 
 zip:
-	zip conta_bancaria.zip main.c bank_account.c
+	zip conta_bancaria.zip main.c bank_account.c binary_tree.c linked_list.c
 
 clean:
 	@rm *.o

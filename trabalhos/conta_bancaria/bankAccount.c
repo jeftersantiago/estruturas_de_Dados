@@ -23,7 +23,7 @@ Account *createAccount(char *str) {
 
       strcpy(account->name, name);
 
-      account->cpf = newCPF(cpf); // formatCPF(cpf);
+      account->cpf = newCPF(cpf); 
       account->age = age;
       account->balance = balance;
         

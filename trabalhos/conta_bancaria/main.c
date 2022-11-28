@@ -20,10 +20,9 @@ int main(){
     int i = 0;
 
     while(i < n) {
+
       char * c = readLine();
-
       Account *account = createAccount(c);
-
       insert(tree, account);
 
       free(c);
