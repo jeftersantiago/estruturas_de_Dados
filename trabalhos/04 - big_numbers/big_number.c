@@ -58,7 +58,7 @@ bigInt *newBigInt() {
 
 bigInt *createBigNumber(char *s){
 
-  bigInt * n  = newBigInt(); // (bigInt *) malloc(sizeof(bigInt));
+  bigInt * n  = newBigInt();
 
   int N = strlen(s);
   int number=0;
@@ -88,19 +88,24 @@ bigInt *createBigNumber(char *s){
 
 static void insert(bigInt *list, int number){
 
-    if(list != NULL){
-        Node *node = (Node *) malloc(sizeof(Node));
-        if(node != NULL) {
-            node->number = number;
-            node->next = NULL;
-            if(is_empty(list))
-                list->begin = node;
-            else
-                list->end->next = node;
-            list->end = node;
-            list->size++;
-        }
+  if(list != NULL){
+
+    Node *node = (Node *) malloc(sizeof(Node));
+
+    if(node != NULL) {
+
+      node->number = number;
+      node->next = NULL;
+
+      if(is_empty(list))
+        list->begin = node;
+      else
+        list->end->next = node;
+
+      list->end = node;
+      list->size++;
     }
+  }
 }
 
 
@@ -168,16 +173,16 @@ boolean equalBigInt(bigInt *n1, bigInt *n2){
  * -1 se n1<n2 e 0 se n1 == n2
 **/
 static int compareBigInt(bigInt *n1, bigInt *n2, Node *p1, Node *p2){
-    if(p1==n1->end)
-        return compareNode(p1,p2);
+  if(p1==n1->end)
+    return compareNode(p1,p2);
 
-    else{
-        int aux=compareBigInt(n1,n2,p1->next,p2->next);
-
-        if (aux!=0)
-            return aux;
-
-        return compareNode(p1,p2);
+  else {
+    int aux=compareBigInt(n1,n2,p1->next,p2->next);
+      
+    if (aux!=0)
+      return aux;
+    
+    return compareNode(p1,p2);
     }
 }
 
