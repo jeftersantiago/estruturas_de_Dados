@@ -9,7 +9,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-
 char *readLine();
 
 int main(){
@@ -17,16 +16,14 @@ int main(){
     BTree *tree = createTree();
 
     int n;
-    char *c = NULL;
     scanf("%d\n", &n);
     int i = 0;
-    while(i < n) { // !strcmp(c, "B") || !strcmp(c, "R")){
 
-      c = readLine();
-      printf("%s\n", c);
-      c = strdup(c);
+    while(i < n) {
+      char * c = readLine();
 
       Account *account = createAccount(c);
+
       insert(tree, account);
 
       free(c);
@@ -34,25 +31,44 @@ int main(){
       i++;
     }
 
-    print_b_tree(tree);
+    char command;
+    scanf("%c\n", &command);
 
-    // printf("Preorder\n");
-    //    traverse(tree, preorder_traversal);
+    if(command == 'I'){
 
-    //    print_b_tree(tree);
-    
-    char * key = "186.161.140-41";
-    //    printf("\nREMOVENDO 18616114041\n\n");
+      char * line = readLine();
 
-    removeFromTree (tree, key);
-    print_b_tree(tree);
+      Account * account = createAccount(line);
 
-    printf("\nPreorder\n");
-    traverse(tree, preorder_traversal);
+      free(line);
+      line = NULL;
 
+      insert(tree, account);
+      traverse(tree, preorder_traversal);
+    }
+    else if (command == 'B') {
 
-    //    printAccount(removed);
-    //    free(c);
+      char * cpf = readLine();
+
+      Account * account = searchTree(tree, cpf);
+
+      printAccount(account);
+
+      free(cpf);
+      cpf = NULL;
+    }
+    else if (command == 'R'){
+
+      char * cpf = readLine();
+      removeFromTree(tree, cpf);
+
+      free(cpf);
+      cpf = NULL;
+
+      traverse(tree, preorder_traversal);
+
+    }
+
     delete_tree(tree);
     return 0;
 }

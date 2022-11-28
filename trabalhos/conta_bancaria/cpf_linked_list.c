@@ -2,13 +2,16 @@
 #include <string.h>
 
 static boolean is_empty(const CPF *list); 
-static void insert(CPF *list, int number);
+static void insert(CPF *list, char * number);
 
 
 typedef struct NODE Node;
 
+static void print (Node *node);
+
 struct NODE {
   int number;
+  boolean zeroAtBegin;
   Node *next;
 };
 
@@ -46,26 +49,38 @@ CPF *newCPF(char *c) {
         cpf->end = NULL;
         cpf->size = 0;
 
+          
         c = strdup(c);
 
+        char * c1 = strsep(&c, ".");
+        char * c2 = strsep(&c, ".");
+        char * c3 = strsep(&c, "-");
+        char * c4 = c;
         /* Divide os pedaços do cpf e insere lista ligada. */
-        insert(cpf, atoi(strsep(&c, ".")));
-        insert(cpf, atoi(strsep(&c, ".")));
-        insert(cpf, atoi(strsep(&c, "-")));
-        insert(cpf, atoi(c));
+        insert(cpf,c1);
+        insert(cpf,c2);
+        insert(cpf,c3);
+        insert(cpf,c4);
 
     }
     return cpf;
 }
 
-static void insert(CPF *list, int number){
+static void insert(CPF *list, char * number){
 
   if(list != NULL){
 
     Node *node = (Node *) malloc(sizeof(Node));
 
     if(node != NULL) {
-      node->number = number;
+
+      node->number = atoi(number);
+      /* Lida com caso onde numero da lista começa com 0 */
+      if(number[0] == '0')
+        node->zeroAtBegin = true;
+      else
+        node->zeroAtBegin = false;
+      
       node->next = NULL;
 
       if(is_empty(list))
@@ -120,13 +135,28 @@ void printCPF(CPF *cpf, boolean formated){
              cpf->begin->next->next->number,
              cpf->begin->next->next->next->number
              );
-    else 
-      printf("%d%d%d%02d\n",
+    else {
+      print(cpf->begin);
+      printf("\n");
+    }
+    /*      printf("%d%d%d%02d\n",
              cpf->begin->number,
              cpf->begin->next->number,
              cpf->begin->next->next->number,
              cpf->begin->next->next->next->number
              );
+    */
+  }
+}
+
+static void print (Node *node) {
+  if(node != NULL) {
+    if(node->zeroAtBegin)
+      printf("0%d", node->number);
+    else
+      printf("%d", node->number);
+    node = node->next;
+    print(node);
   }
 }
 

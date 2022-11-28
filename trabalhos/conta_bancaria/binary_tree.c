@@ -31,21 +31,7 @@ Account * searchTree (BTree * tree, char * key) {
   return search(tree->parent, cpf);
 }
 
-Account * swapMaxLeft (Node * swap, Node * parent, Node *prior) {
-  if(swap->left != NULL)
-    return swapMaxLeft(swap->right, parent, swap);
-  if(parent == prior)
-    prior->left = swap->left;
-  else
-    prior->right = swap->right;
-
-  parent->account = swap->account;
-  free(swap);
-  swap = NULL;
-  return parent->account;
-}
-
-
+/* Remove o nó com a conta que possui o CPF do paramêtro e retorna a conta. */
 void removeNode(Node **node, CPF * cpf) {
   if(*node == NULL) return;
 
@@ -84,7 +70,6 @@ void removeNode(Node **node, CPF * cpf) {
       Node * aux = (*node)->right; 
       while(aux->left != NULL)
         aux = aux->left;
-
       (*node)->account = aux->account;
       return removeNode(&(*node)->right, getCPF(aux->account));
     }
@@ -93,7 +78,14 @@ void removeNode(Node **node, CPF * cpf) {
   
 void removeFromTree (BTree * tree, char * key) {
   CPF * cpf = newCPF(key);
+  
+  Account * account = search(tree->parent, cpf);
   removeNode(&(tree->parent), cpf);
+
+  if(account != NULL) {
+    printAccount(account);
+    deleteAccount(account);
+  }
   deleteCPF(cpf);
 }
 
@@ -135,15 +127,12 @@ void insert(BTree  *tree, Account *account){
     insertNode(tree->parent, account);
 }
 
-/**
-   Example of use
-   traverse(tree, inorder_traversal)
- **/
 void traverse(BTree *tree, Traversal traversal){
     traversal(tree->parent);
 }
 
 void preorder_traversal(Node *node) {
+  printf("Preorder\n");
   preorder_traversal_recursive(node);
 }
 
