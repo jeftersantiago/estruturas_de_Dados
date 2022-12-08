@@ -1,4 +1,4 @@
-UTIL=bankAccount.c binaryTree.c linkedList.c
+UTIL=AVLTree.c Game.c
 MAIN=main.c
 BINARY=main
 
@@ -15,6 +15,6 @@ valgrind:
 	valgrind --tool=memcheck --leak-check=full  --track-origins=yes --show-leak-kinds=all --show-reachable=yes ./$(BINARY)
 
 zip:
-	zip conta_bancaria.zip Makefile main.c Util.h linkedList.h linkedList.c bankAccount.h bankAccount.c binaryTree.h binaryTree.c
+	zip arvoreAVL.zip Makefile main.c AVLTree.c Game.c 
 clean:
 	@rm *.o

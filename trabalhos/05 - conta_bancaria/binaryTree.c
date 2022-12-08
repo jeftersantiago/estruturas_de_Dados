@@ -1,22 +1,19 @@
 #include "binaryTree.h"
 #include "bankAccount.h"
 
-
-static void preorder_traversal_recursive(Node *node);
-static void postorder_traversal_recursive(Node *node);
-static void inorder_traversal_recursive(Node *node);
+static void preorder_traversal_recursive(TreeNode *node);
 
 struct NODE{
     Account *account;
-    Node *right;
-    Node *left;
+    TreeNode *right;
+    TreeNode *left;
 };
 struct BINARY_TREE {
-    Node *parent;
+    TreeNode *parent;
     int height;
 };
 
-static Account * search(Node * node, CPF * cpf){
+static Account * search(TreeNode * node, CPF * cpf){
   if(node == NULL) return NULL;
   if(compareCPF(cpf, getCPF(node->account), equal))
     return node->account;
@@ -28,11 +25,14 @@ static Account * search(Node * node, CPF * cpf){
 
 Account * searchTree (BTree * tree, char * key) {
   CPF * cpf = newCPF(key);
-  return search(tree->parent, cpf);
+  Account * acc = search(tree->parent, cpf);
+  deleteCPF(cpf);
+  free(key);
+  return acc;
 }
 
 /* Remove o nó com a conta que possui o CPF do paramêtro e retorna a conta. */
-void removeNode(Node **node, CPF * cpf) {
+void removeNode(TreeNode **node, CPF * cpf) {
   if(*node == NULL) return;
 
   CPF * tmpCPF = getCPF((*node)->account);
@@ -51,14 +51,14 @@ void removeNode(Node **node, CPF * cpf) {
     }
     /* So tem filho direito */
     if((*node)->left == NULL){
-      Node * aux = *node;
+      TreeNode * aux = *node;
       *node = (*node)->right;
       free(aux);
       return;
     }
     /* So tem filho esquerdo*/
     if((*node)->right == NULL){
-      Node * aux = *node;
+      TreeNode * aux = *node;
       *node = (*node)->left;
       free(aux);
       return;
@@ -67,7 +67,7 @@ void removeNode(Node **node, CPF * cpf) {
        Escolhe o menor filho do ramo direito para substituir o no removido.
      */
     else {
-      Node * aux = (*node)->right; 
+      TreeNode * aux = (*node)->right; 
       while(aux->left != NULL)
         aux = aux->left;
       (*node)->account = aux->account;
@@ -86,6 +86,8 @@ void removeFromTree (BTree * tree, char * key) {
     printAccount(account);
     deleteAccount(account);
   }
+
+  free(key);
   deleteCPF(cpf);
 }
 
@@ -98,8 +100,8 @@ BTree *createTree() {
     return tree;
 }
 
-static Node * createNode(Account *account){
-    Node * newNode = (Node *) malloc(sizeof(Node));
+static TreeNode * createNode(Account *account){
+    TreeNode * newNode = (TreeNode *) malloc(sizeof(TreeNode));
     if(newNode != NULL){
         newNode->account = account;
         newNode->left = NULL;
@@ -108,7 +110,7 @@ static Node * createNode(Account *account){
     return newNode;
 }
 
-static Node * insertNode(Node *parent, Account *account){
+static TreeNode * insertNode(TreeNode *parent, Account *account){
 
   if(parent == NULL)
     parent = createNode(account);
@@ -120,31 +122,19 @@ static Node * insertNode(Node *parent, Account *account){
   return parent;
 }
 
-void insert(BTree  *tree, Account *account){
+void insertTree(BTree  *tree, Account *account){
   if(tree->parent == NULL)
     tree->parent = createNode(account);
   else
     insertNode(tree->parent, account);
 }
 
-void traverse(BTree *tree, Traversal traversal){
-    traversal(tree->parent);
-}
-
-void preorder_traversal(Node *node) {
+void preorderTraversal(BTree *tree) {
   printf("Preorder\n");
-  preorder_traversal_recursive(node);
+  preorder_traversal_recursive(tree->parent);
 }
 
-void inorder_traversal(Node *node) {
-  inorder_traversal_recursive(node);
-}
-
-void postorder_traversal(Node *node) {
-  postorder_traversal_recursive(node);
-}
-
-static void preorder_traversal_recursive(Node *node){
+static void preorder_traversal_recursive(TreeNode *node){
   if(node != NULL){
     printCPF(getCPF(node->account), false);
     preorder_traversal_recursive(node->left);
@@ -152,80 +142,27 @@ static void preorder_traversal_recursive(Node *node){
   }
 }
 
-static void inorder_traversal_recursive(Node *node){
-    if(node != NULL){
-        preorder_traversal_recursive(node->left);
-        printCPF(getCPF(node->account), false);
-        preorder_traversal_recursive(node->right);
-    }
-}
-
-static void postorder_traversal_recursive(Node *node){
-    if(node != NULL){
-        preorder_traversal_recursive(node->left);
-        preorder_traversal_recursive(node->right);
-        printCPF(getCPF(node->account), false);
-    }
-}
-
-static void delete_node(Node * node){
-  Node * auxRight = NULL;
-  Node * auxLeft = NULL;
+static void deleteTreeNode(TreeNode * node){
+  TreeNode * auxRight = NULL;
+  TreeNode * auxLeft = NULL;
 
   if(node != NULL){
     auxLeft = node->left;
     auxRight = node->right;
 
     deleteAccount(node->account);
+
     free(node);
     
-    delete_node(auxLeft);
-    delete_node(auxRight);
+    deleteTreeNode(auxLeft);
+    deleteTreeNode(auxRight);
   }
 
 }
-void delete_tree(BTree * tree){
-  Node * parent = tree->parent;
+void deleteTree(BTree * tree){
+  TreeNode * parent = tree->parent;
   if(parent != NULL){
-    delete_node(parent->left);
-    delete_node(parent->right);
+    deleteTreeNode(parent);
   }
   free(tree);
 }
-
-
-// Function to print binary tree in 2D
-// It does reverse inorder traversal
-// https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/
-static void print2DUtil(Node *parent, int space){
-  int COUNT = 6;
-  // Base case
-  if (parent == NULL)
-    return;
-
-  // Increase distance between levels
-  space += COUNT;
-
-  // Process right child first
-  print2DUtil(parent->right, space);
-
-  // Print current node after space
-  // count
-  printf("\n");
-  for (int i = COUNT; i < space; i++)
-    printf(" ");
-  // printf("%s\n", getName(parent->account));
-  printf("%d\n", getCPF_tests(getCPF(parent->account)));
-  //int getCPF_tests(CPF *c);
-
-  // Process left child
-  print2DUtil(parent->left, space);
-}
-
-// Wrapper over print2DUtil()
-void print_b_tree(BTree *tree)
-{
-    // Pass initial space count as 0
-    print2DUtil(tree->parent, 0);
-}
-

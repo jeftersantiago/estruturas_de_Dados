@@ -1,4 +1,5 @@
 #include "bankAccount.h"
+#include "linkedList.h"
 
 struct ACCOUNT {
     char *name;
@@ -11,14 +12,16 @@ Account *createAccount(char *str) {
 
     Account *account = (Account *) malloc(sizeof(Account));
     
+    char * line = str;
     if(account != NULL){
-
+      
       char * cpf = strsep(&str, ";");
       char * name = strsep(&str, ";");
       int age = atoi(strsep(&str, ";"));
+
       float balance = atof(str);
-        
       size_t length = strlen(name);
+
       account->name = (char *) malloc(sizeof(char *) * (int) length);
 
       strcpy(account->name, name);
@@ -28,6 +31,7 @@ Account *createAccount(char *str) {
       account->balance = balance;
         
     }
+    free(line);
     return account;
 }
 

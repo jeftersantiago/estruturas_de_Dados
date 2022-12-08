@@ -2,12 +2,7 @@
    Jefter Santiago, nºUSP: 12559016
    João Lucas Vasconselos, nºUSP: 12557870
  **/
-
 #include "binaryTree.h"
-
-#include<string.h>
-#include<stdio.h>
-#include<stdlib.h>
 
 char *readLine();
 
@@ -20,13 +15,8 @@ int main(){
     int i = 0;
 
     while(i < n) {
-
-      char * c = readLine();
-      Account *account = createAccount(c);
-      insert(tree, account);
-
-      free(c);
-      c = NULL;
+      Account *account = createAccount(readLine());
+      insertTree(tree, account);
       i++;
     }
 
@@ -34,42 +24,21 @@ int main(){
     scanf("%c\n", &command);
 
     if(command == 'I'){
-
-      char * line = readLine();
-
-      Account * account = createAccount(line);
-
-      free(line);
-      line = NULL;
-
-      insert(tree, account);
-      traverse(tree, preorder_traversal);
+      Account * account = createAccount(readLine());
+      insertTree(tree, account);
+      preorderTraversal(tree);
     }
     else if (command == 'B') {
-
-      char * cpf = readLine();
-
-      Account * account = searchTree(tree, cpf);
-
+      Account * account = searchTree(tree, readLine());
       printAccount(account);
-
-      free(cpf);
-      cpf = NULL;
+      //      deleteAccount(account);
     }
     else if (command == 'R'){
-
-      char * cpf = readLine();
-      removeFromTree(tree, cpf);
-
-      free(cpf);
-      cpf = NULL;
-
-      traverse(tree, preorder_traversal);
+      removeFromTree(tree, readLine());
+      preorderTraversal(tree);
     }
-
     printf("\n"); /* So pra fazer o output correto no runcodes*/
-
-    delete_tree(tree);
+    deleteTree(tree);
     return 0;
 }
 

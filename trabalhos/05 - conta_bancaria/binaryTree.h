@@ -1,27 +1,17 @@
 #ifndef _binary_tree
 #define _binary_tree
 
-#include "bankAccount.h"
+#include "Util.h"
+#include "linkedList.h"
 
 typedef struct BINARY_TREE BTree;
-typedef struct NODE Node;
-
-typedef void (*Traversal) (Node *tree);
+typedef struct NODE TreeNode;
 
 BTree *createTree();
-
-void print_b_tree(BTree *tree);
-
-void insert(BTree  *tree, Account *account);
-void removeFromTree(BTree *tree, char * cpf);
-
 Account * searchTree (BTree * tree, char * cpf);
+void insertTree(BTree  *tree, Account *account);
+void removeFromTree(BTree *tree, char * cpf);
+void preorderTraversal(BTree *tree);
+void deleteTree(BTree * tree);
 
-void traverse(BTree *tree, Traversal traversal);
-
-void preorder_traversal(Node *node);
-void inorder_traversal(Node *node);
-void postorder_traversal(Node *node);
-
-void delete_tree(BTree * tree);
 #endif

@@ -1,10 +1,9 @@
-#include "bankAccount.h"
-#include <string.h>
+#include "linkedList.h"
 
 typedef struct NODE Node;
 
 static boolean is_empty(const CPF *list); 
-static void insert(CPF *list, char * number);
+static void insertLinkedList(CPF *list, char * number);
 static void recursivePrint (Node *node);
 
 struct NODE {
@@ -41,15 +40,15 @@ CPF *newCPF(char *c) {
   char * c4 = c;
   
   /* Divide os pedaços do cpf e insere lista ligada. */
-  insert(cpf,c1);
-  insert(cpf,c2);
-  insert(cpf,c3);
-  insert(cpf,c4);
+  insertLinkedList(cpf,c1);
+  insertLinkedList(cpf,c2);
+  insertLinkedList(cpf,c3);
+  insertLinkedList(cpf,c4);
 
   return cpf;
 }
 
-static void insert(CPF *cpf, char * number){
+static void insertLinkedList(CPF *cpf, char * number){
   if(cpf != NULL){
     
     Node *node = (Node *) malloc(sizeof(Node));
@@ -104,11 +103,13 @@ static boolean is_empty(const CPF *list) {
 }
 
 static void delete_node(Node * node){
-  Node *aux = NULL;
+  Node *aux =  NULL;
   if(node != NULL)  {
     aux = node->next;
     free(node);
+    node = NULL;
     delete_node(aux);
+    aux = NULL;
   }
 }
 
@@ -116,6 +117,7 @@ void deleteCPF(CPF *list){
   Node * node = list->begin;
   delete_node(node);
   free(list);
+  list = NULL;
 }
 
 void printCPF(CPF *cpf, boolean formated){
