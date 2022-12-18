@@ -19,7 +19,9 @@ Game * newGame (char * line) {
     game->name = (char *) malloc(sizeof(char) * strlen(name));
     strcpy(game->name, name);
 
-    game->developer = (char *) malloc(sizeof(char) * strlen(dev));
+    size_t length = strlen(dev);
+
+    game->developer = (char *) malloc(sizeof(char) * length);
     strcpy(game->developer, dev);
 
     game->year = year;
@@ -27,8 +29,6 @@ Game * newGame (char * line) {
   }
   return game;
 }
-
-
 
 char *getName(Game * game){
   return game->name;
@@ -55,17 +55,3 @@ boolean compare(Game * game1, Game * game2) {
     return strcmp(game1->name, game2->name) < 0; 
   return false;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

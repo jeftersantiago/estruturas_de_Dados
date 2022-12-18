@@ -7,7 +7,7 @@ char *readLine();
 int main ()  {
 
 
-  AVLTree * tree = buildTree ();
+  AVLTree * tree = buildTree();
 
   /*
     int traverseType;
@@ -16,7 +16,7 @@ int main ()  {
     char * c = readLine();
   */
   
-  //  deleteTree(tree);
+  deleteTree(tree);
   return 0;
 }
 

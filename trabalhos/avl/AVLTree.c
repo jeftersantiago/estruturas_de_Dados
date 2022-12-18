@@ -1,26 +1,25 @@
 #include "AVLTree.h"
 #include "Game.h"
 
-static void preorder_traversal_recursive(Node *node);
-static void inorder_traversal_recursive(Node *node);
-static void postorder_traversal_recursive(Node *node);
+static void preorder_traversal_recursive(NodeTree *node);
+static void inorder_traversal_recursive(NodeTree *node);
+static void postorder_traversal_recursive(NodeTree *node);
 
-static void deleteNode(Node * node);
+static void delete_node(NodeTree * node);
+static NodeTree * createNode(Game * game);
+static NodeTree * insertNode (NodeTree * parent, Game * game) ;
 
-static Node * createNode(Game * game);
-static Node * insertNode (Node * parent, Game * game) ;
-
-static void print2DUtil(Node *parent, int space);
+static void print2DUtil(NodeTree *parent, int space);
 
 struct AVL_TREE {
-  Node * parent;
+  NodeTree * parent;
   int height;
 };
 
-struct NODE {
+struct NODE_TREE {
   Game * game;
-  Node * left;
-  Node * right;
+  NodeTree * left;
+  NodeTree * right;
 };
 
 
@@ -32,7 +31,6 @@ AVLTree * buildTree() {
   FILE *file;
   file = fopen(fname, "r");
 
-  //  char * line = (char *) malloc(sizeof(char *) * 100);
   char line[150];
 
   Game ** game  = (Game **) malloc(sizeof(Game *) * 34);
@@ -41,23 +39,27 @@ AVLTree * buildTree() {
 
     game[i] = newGame(line);
     printGame(game[i]);
-    
     //    insert(tree, game[i]);
     //    printTree(tree);
     i++;
   }  
 
+  for(int j = 0; j < i; j++)
+    deleteGame(game[j]);
+  free(game);
+
+  /**
   for(int i = 0; i < 34; i++)
     printGame(game[i]);
+  **/
   
 
   fclose(file);
-  //  free(line);
   return tree;
 }
 
-static Node * createNode(Game * game){
-  Node * newNode  = (Node *) malloc(sizeof(Node));
+static NodeTree * createNode(Game * game){
+  NodeTree * newNode  = (NodeTree *) malloc(sizeof(NodeTree));
   if(newNode != NULL){
     newNode->game = game;
     newNode->left = NULL;
@@ -65,7 +67,7 @@ static Node * createNode(Game * game){
   }
   return newNode;
 }
-static Node * insertNode (Node * parent, Game * game) {
+static NodeTree * insertNode (NodeTree * parent, Game * game) {
   if(parent == NULL)
     parent = createNode(game);
   else if (compare(game, parent->game))
@@ -91,7 +93,7 @@ void traverse(AVLTree *tree, int traverseType){
     postorder_traversal_recursive(tree->parent);
 }
 
-static void preorder_traversal_recursive(Node *node){
+static void preorder_traversal_recursive(NodeTree *node){
   if(node != NULL){
     //    printCPF(getCPF(node->account), false);
     preorder_traversal_recursive(node->left);
@@ -99,7 +101,7 @@ static void preorder_traversal_recursive(Node *node){
   }
 }
 
-static void inorder_traversal_recursive(Node *node){
+static void inorder_traversal_recursive(NodeTree *node){
     if(node != NULL){
         preorder_traversal_recursive(node->left);
         //        printCPF(getCPF(node->account), false);
@@ -107,7 +109,7 @@ static void inorder_traversal_recursive(Node *node){
     }
 }
 
-static void postorder_traversal_recursive(Node *node){
+static void postorder_traversal_recursive(NodeTree *node){
     if(node != NULL){
         preorder_traversal_recursive(node->left);
         preorder_traversal_recursive(node->right);
@@ -116,9 +118,9 @@ static void postorder_traversal_recursive(Node *node){
 }
 
 
-static void deleteNode(Node * node){
-  Node * auxRight = NULL;
-  Node * auxLeft = NULL;
+static void delete_node(NodeTree * node){
+  NodeTree * auxRight = NULL;
+  NodeTree * auxLeft = NULL;
 
   if(node != NULL){
     auxLeft = node->left;
@@ -127,18 +129,19 @@ static void deleteNode(Node * node){
     deleteGame(node->game);
     free(node);
     
-    deleteNode(auxLeft);
-    deleteNode(auxRight);
+    delete_node(auxLeft);
+    delete_node(auxRight);
   }
 
 }
 void deleteTree(AVLTree * tree){
-  Node * parent = tree->parent;
-  if(parent != NULL){
-    deleteNode(parent->left);
-    deleteNode(parent->right);
+  if(tree != NULL){
+    NodeTree * parent = tree->parent;
+    if(parent != NULL){
+      delete_node(parent);
+    }
+    free(tree);
   }
-  free(tree);
 }
 void printTree(AVLTree *tree) {
   print2DUtil(tree->parent, 0);
@@ -147,7 +150,7 @@ void printTree(AVLTree *tree) {
 // Function to print binary tree in 2D
 // It does reverse inorder traversal
 // https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/
-static void print2DUtil(Node *parent, int space){
+static void print2DUtil(NodeTree *parent, int space){
   int COUNT = 6;
   // Base case
   if (parent == NULL)

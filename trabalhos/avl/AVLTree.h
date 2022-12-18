@@ -8,7 +8,7 @@
 #include "Game.h"
 
 typedef struct AVL_TREE AVLTree;
-typedef struct NODE Node;
+typedef struct NODE_TREE NodeTree;
 
 AVLTree * buildTree();
 
