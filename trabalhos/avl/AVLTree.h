@@ -5,5 +5,5 @@
 typedef struct AVL_TREE AVLTree;
 AVLTree * newTree ();
 void deleteTree (AVLTree * tree);
-void traverse (AVLTree * tree, int transverseType);
+void traverse (AVLTree * tree, int trasverseType);
 #endif

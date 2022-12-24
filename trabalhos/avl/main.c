@@ -11,20 +11,12 @@ int main ()  {
   //    printf("Sim é menor\n");
   //  }
   AVLTree * tree = newTree();
+  int traverseType;
+  scanf("%d\n", &traverseType);
 
-  printf("\nPreorder\n---------------\n");
-
-  traverse(tree, 1);
+  traverse(tree, traverseType);
 
   deleteTree(tree);
-
-  /*
-    int traverseType;
-    scanf("%d", &traverseType);
-    printf("Traverse option = %d\n", traverseType);
-    char * c = readLine();
-  deleteTree(tree);
-  */
   return 0;
 }
 

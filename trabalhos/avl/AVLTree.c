@@ -3,14 +3,14 @@ typedef struct NODE Node;
 
 
 static void preorder_traversal_recursive(Node *node);
-/*
 static void inorder_traversal_recursive(Node *node);
 static void postorder_traversal_recursive(Node *node);
 
+/**
 static void print2DUtil(Node *parent, int space);
 static AVLTree * newTree () ;
-*/
 static Node * newNode (Game * game) ;
+**/
 
 static Node  * leftRotate (Node * node) ;
 static Node  * rightRotate (Node * node) ;
@@ -38,9 +38,12 @@ AVLTree * newTree () {
 
   AVLTree * tree = createTree() ;
 
-  char * fname = "./data/allGames.csv";
+  char * fname = "CSV.csv";
   FILE *file;
   file = fopen(fname, "r");
+
+  fseek(file, 3, SEEK_SET);
+
 
   char line[200];
   Game * game =  NULL;   // (Game **) malloc(sizeof(Game *) * 34);//
@@ -49,12 +52,12 @@ AVLTree * newTree () {
   while(fgets(line, 200, file)){
     game = newGame(line);
     //    printf("i = %d - ", i);
-    printGame(game);
+    //    printGame(game);
     insert(tree, game);
     i++;
   }
 
-  preorder_traversal_recursive(tree->parent);
+  //  preorder_traversal_recursive(tree->parent);
 
   fclose(file);
   return tree;
@@ -211,8 +214,13 @@ static void insert (AVLTree * tree, Game * game){
   tree->parent = insertNode(tree->parent, game, &flag);
 }
 
-void traverse (AVLTree * tree, int transverseType){
-  preorder_traversal_recursive(tree->parent);
+void traverse(AVLTree *tree, int traverseType){
+  if(traverseType == 1)
+    preorder_traversal_recursive(tree->parent);
+  if(traverseType == 2)
+    inorder_traversal_recursive(tree->parent);
+  if(traverseType == 3)
+    postorder_traversal_recursive(tree->parent);
 }
 
 static void preorder_traversal_recursive(Node *node){
@@ -221,6 +229,22 @@ static void preorder_traversal_recursive(Node *node){
     preorder_traversal_recursive(node->left);
     preorder_traversal_recursive(node->right);
   }
+}
+
+static void inorder_traversal_recursive(Node *node){
+    if(node != NULL){
+        preorder_traversal_recursive(node->left);
+        printGame(node->game);
+        preorder_traversal_recursive(node->right);
+    }
+}
+
+static void postorder_traversal_recursive(Node *node){
+    if(node != NULL){
+        preorder_traversal_recursive(node->left);
+        preorder_traversal_recursive(node->right);
+        printGame(node->game);
+    }
 }
 
 

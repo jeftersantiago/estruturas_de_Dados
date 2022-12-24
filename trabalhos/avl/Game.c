@@ -34,8 +34,9 @@ char *getName(Game * game){
 }
 int getYear(Game * game) { return game->year; }
 void printGame(Game * game){
-  printf("%s, %d\n", game->name, game->year);
+  //  printf("%s, %d\n", game->name, game->year);
   //  printf("%s %d %s", game->name, game->year, game->developer);
+  printf("%s\n", game->name);
 }
 
 void deleteGame(Game * game){

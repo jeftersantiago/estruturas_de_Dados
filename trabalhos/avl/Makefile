@@ -15,6 +15,6 @@ valgrind:
 	valgrind --tool=memcheck --leak-check=full  --track-origins=yes --show-leak-kinds=all --show-reachable=yes ./$(BINARY)
 
 zip:
-	zip arvoreAVL.zip Makefile main.c AVLTree.c Game.c 
+	zip arvoreAVL.zip Makefile main.c AVLTree.h Game.h AVLTree.c Game.c 
 clean:
 	@rm *.o
