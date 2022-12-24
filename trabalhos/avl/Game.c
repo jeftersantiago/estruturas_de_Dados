@@ -16,16 +16,15 @@ Game * newGame (char * line) {
     int year =  atoi(strsep(&line, ";"));
     char * dev = strsep(&line, ";");
 
-    game->name = (char *) malloc(sizeof(char) * strlen(name));
+    size_t length = strlen(name) + 5;
+    game->name =  (char *) malloc(sizeof(char) *  (int) length);
     strcpy(game->name, name);
 
-    size_t length = strlen(dev);
-
-    game->developer = (char *) malloc(sizeof(char) * length);
-    strcpy(game->developer, dev);
-
     game->year = year;
-    
+
+    length = strlen(dev) + 5;
+    game->developer = (char *) malloc(sizeof(char) * (int) length);
+    strcpy(game->developer, dev);
   }
   return game;
 }
@@ -33,8 +32,10 @@ Game * newGame (char * line) {
 char *getName(Game * game){
   return game->name;
 }
+int getYear(Game * game) { return game->year; }
 void printGame(Game * game){
-  printf("%s %d %s", game->name, game->year, game->developer);
+  printf("%s, %d\n", game->name, game->year);
+  //  printf("%s %d %s", game->name, game->year, game->developer);
 }
 
 void deleteGame(Game * game){
@@ -43,15 +44,14 @@ void deleteGame(Game * game){
   free(game);
 }
 
-/* Retorna true se ano do Game1 for maior que o de Game2
-   Se forem iguais retorna de acordo com a comparacao da funcao
-   strcmp(name1, name2) < 0;
-   Se name1 > name2 => returna true
+/*
+  Retorna true se ano do game1 for maior que o de game2
+  Se os anos forem iguais retorna de acordo com a comparacao da funcao
+  strcmp(name1, name2) < 0;
+  Se name1 > name2 => returna true
  */
-boolean compare(Game * game1, Game * game2) {
-  if(game1->year > game2->year)
-    return true;
+boolean isGreater(Game * game1, Game * game2){
   if(game1->year == game2->year)
-    return strcmp(game1->name, game2->name) < 0; 
-  return false;
+    return strcmp(game1->name, game2->name) < 0;
+  return game1->year > game2->year;
 }

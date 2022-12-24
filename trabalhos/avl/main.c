@@ -7,16 +7,24 @@ char *readLine();
 int main ()  {
 
 
-  AVLTree * tree = buildTree();
+  //  if(strcmp("A Plague Tale: Innocence", "Assassin's Creed") < 0){
+  //    printf("Sim é menor\n");
+  //  }
+  AVLTree * tree = newTree();
+
+  printf("\nPreorder\n---------------\n");
+
+  traverse(tree, 1);
+
+  deleteTree(tree);
 
   /*
     int traverseType;
     scanf("%d", &traverseType);
     printf("Traverse option = %d\n", traverseType);
     char * c = readLine();
-  */
-  
   deleteTree(tree);
+  */
   return 0;
 }
 

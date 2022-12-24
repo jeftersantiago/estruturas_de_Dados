@@ -1,126 +1,232 @@
 #include "AVLTree.h"
-#include "Game.h"
+typedef struct NODE Node;
 
-static void preorder_traversal_recursive(NodeTree *node);
-static void inorder_traversal_recursive(NodeTree *node);
-static void postorder_traversal_recursive(NodeTree *node);
 
-static void delete_node(NodeTree * node);
-static NodeTree * createNode(Game * game);
-static NodeTree * insertNode (NodeTree * parent, Game * game) ;
+static void preorder_traversal_recursive(Node *node);
+/*
+static void inorder_traversal_recursive(Node *node);
+static void postorder_traversal_recursive(Node *node);
 
-static void print2DUtil(NodeTree *parent, int space);
+static void print2DUtil(Node *parent, int space);
+static AVLTree * newTree () ;
+*/
+static Node * newNode (Game * game) ;
 
-struct AVL_TREE {
-  NodeTree * parent;
-  int height;
-};
+static Node  * leftRotate (Node * node) ;
+static Node  * rightRotate (Node * node) ;
+static Node * insertNode (Node * node, Game * game, int * flag);
+static void insert (AVLTree * tree, Game * game);
 
-struct NODE_TREE {
+struct NODE {
+  Node * left;
+  Node * right;
   Game * game;
-  NodeTree * left;
-  NodeTree * right;
+  int balance;
+};
+struct AVL_TREE {
+  Node * parent;
 };
 
 
-AVLTree * buildTree() {
+AVLTree * createTree () {
+  AVLTree * tree = (AVLTree *) malloc(sizeof(AVLTree));
+  if(tree != NULL)
+    tree->parent = NULL;
+  return tree;
+}
+AVLTree * newTree () {
 
-  AVLTree * tree = NULL; // (AVLTree *) malloc(sizeof(AVLTree));
+  AVLTree * tree = createTree() ;
 
   char * fname = "./data/allGames.csv";
   FILE *file;
   file = fopen(fname, "r");
 
-  char line[150];
+  char line[200];
+  Game * game =  NULL;   // (Game **) malloc(sizeof(Game *) * 34);//
+  int i = 0;
 
-  Game ** game  = (Game **) malloc(sizeof(Game *) * 34);
-  int i = 0 ;
-  while(fgets(line, 150, file)){
-
-    game[i] = newGame(line);
-    printGame(game[i]);
-    //    insert(tree, game[i]);
-    //    printTree(tree);
+  while(fgets(line, 200, file)){
+    game = newGame(line);
+    //    printf("i = %d - ", i);
+    printGame(game);
+    insert(tree, game);
     i++;
-  }  
+  }
 
-  for(int j = 0; j < i; j++)
-    deleteGame(game[j]);
-  free(game);
-
-  /**
-  for(int i = 0; i < 34; i++)
-    printGame(game[i]);
-  **/
-  
+  preorder_traversal_recursive(tree->parent);
 
   fclose(file);
   return tree;
 }
 
-static NodeTree * createNode(Game * game){
-  NodeTree * newNode  = (NodeTree *) malloc(sizeof(NodeTree));
-  if(newNode != NULL){
-    newNode->game = game;
-    newNode->left = NULL;
-    newNode->right = NULL;
+static Node * newNode(Game * game) {
+  Node * node = (Node *) malloc(sizeof(Node));
+  if(node != NULL) {
+    node->game = game;
+    node->left = NULL;
+    node->right = NULL;
+    /* */
+    node->balance = 0;
   }
-  return newNode;
+  return node;
 }
-static NodeTree * insertNode (NodeTree * parent, Game * game) {
-  if(parent == NULL)
-    parent = createNode(game);
-  else if (compare(game, parent->game))
-    parent->right = insertNode(parent->right, game);
-  else if (compare(parent->game, game))
-    parent->left = insertNode(parent->left, game);
-  return parent;
-}
-
-void insert(AVLTree * tree, Game * game){
-  if(tree->parent == NULL)
-    tree->parent = createNode(game);
-  else
-    insertNode(tree->parent, game);
-}
-
-void traverse(AVLTree *tree, int traverseType){
-  if(traverseType == 1)
-    preorder_traversal_recursive(tree->parent);
-  if(traverseType == 2)
-    inorder_traversal_recursive(tree->parent);
-  if(traverseType == 3)
-    postorder_traversal_recursive(tree->parent);
-}
-
-static void preorder_traversal_recursive(NodeTree *node){
+static Node * leftRotate (Node * node) {
   if(node != NULL){
-    //    printCPF(getCPF(node->account), false);
+    Node * aux = node->right;
+    node->right = aux->left;
+    aux->left = node;
+    return aux;
+  }
+  return NULL;
+}
+static Node * rightRotate (Node * node) {
+  if(node != NULL){
+    Node * aux = node->left;
+    node->left = aux->right;
+    aux->right = node;
+    return aux;
+  }
+  return NULL;
+}
+
+Node * insertNode (Node * node, Game * game, int * flag) {
+
+  if(node != NULL){
+
+    /* Caso 1 -> Insercao do lado esquerdo. */
+    if(isGreater(node->game, game)) {
+
+      node->left = insertNode(node->left, game, flag);
+      if(*flag == 1) {
+        /* Casos de balanceamento */
+        switch(node->balance){
+        case -1:
+          node->balance = 0;
+          *flag = 0;
+          break;
+        case 0:
+          node->balance = 1;
+          *flag = 1;
+          break;
+          /* Caso com desbalanceamento.
+             node->height > 1
+           */
+        case 1:
+          /* Caso: Rotacao simples */
+          if(node->left->balance == 1) {
+            node = rightRotate(node);
+            node->right->balance = 0;
+            node->balance = 0;
+          }
+          /* Rotacao dupla */
+          else {
+
+            node->left = leftRotate(node->left);
+            node = rightRotate(node);
+
+            if(node->balance == -1){
+              node->left->balance = 1;
+              node->right->balance = 0;
+              node->balance = 0;
+            }
+            else if(node->balance == 1){
+              node->left->balance = 0;
+              node->right->balance = -1;
+              node->balance = 0;
+            }
+            else { // node->balance == 0
+              node->left->balance = 0;
+              node->right->balance = 0;
+              node->balance = 0;
+            }
+          }
+          *flag = 0;
+          break;
+        }
+    }
+      }
+    /* Caso 2 -> Insercao do lado direito. */
+    else if (isGreater(game, node->game)){
+      
+      node->right = insertNode(node->right, game, flag);
+
+      if(*flag == 1) {
+        /* Casos de balanceamento */
+        switch(node->balance){
+        case 1:
+          node->balance = 0;
+          *flag = 0;
+          break;
+        case 0:
+          node->balance = -1;
+          *flag = 1;
+          break;
+          /* Caso com desbalanceamento.
+             node->height > 1
+           */
+        case -1:
+          /* Caso: Rotacao simples */
+          if(node->right->balance == -1) {
+            node = leftRotate(node);
+            node->left->balance = 0;
+            node->balance = 0;
+          }
+          /* Rotacao dupla */
+          else {
+
+            node->right = rightRotate(node->right);
+            node = leftRotate(node);
+
+            if(node->balance == -1){
+              node->left->balance = 1;
+              node->right->balance = 0;
+              node->balance = 0;
+            }
+            else if(node->balance == 1){
+              node->left->balance = 0;
+              node->right->balance = -1;
+              node->balance = 0;
+            }
+            else { // node->balance == 0
+              node->left->balance = 0;
+              node->right->balance = 0;
+              node->balance = 0;
+            }
+          }
+          *flag = 0;
+          break;
+        }
+      }
+    }
+  }
+  else {
+    node = newNode (game);
+  }
+  return node;
+}
+
+static void insert (AVLTree * tree, Game * game){
+  int flag = 1;
+  tree->parent = insertNode(tree->parent, game, &flag);
+}
+
+void traverse (AVLTree * tree, int transverseType){
+  preorder_traversal_recursive(tree->parent);
+}
+
+static void preorder_traversal_recursive(Node *node){
+  if(node != NULL){
+    printGame(node->game);
     preorder_traversal_recursive(node->left);
     preorder_traversal_recursive(node->right);
   }
 }
 
-static void inorder_traversal_recursive(NodeTree *node){
-    if(node != NULL){
-        preorder_traversal_recursive(node->left);
-        //        printCPF(getCPF(node->account), false);
-        preorder_traversal_recursive(node->right);
-    }
-}
 
-static void postorder_traversal_recursive(NodeTree *node){
-    if(node != NULL){
-        preorder_traversal_recursive(node->left);
-        preorder_traversal_recursive(node->right);
-        //        printCPF(getCPF(node->account), false);
-    }
-}
-
-
-static void delete_node(NodeTree * node){
-  NodeTree * auxRight = NULL;
-  NodeTree * auxLeft = NULL;
+static void delete_node(Node * node){
+  Node * auxRight = NULL;
+  Node * auxLeft = NULL;
 
   if(node != NULL){
     auxLeft = node->left;
@@ -132,45 +238,16 @@ static void delete_node(NodeTree * node){
     delete_node(auxLeft);
     delete_node(auxRight);
   }
-
 }
+
 void deleteTree(AVLTree * tree){
   if(tree != NULL){
-    NodeTree * parent = tree->parent;
+    Node * parent = tree->parent;
     if(parent != NULL){
       delete_node(parent);
     }
     free(tree);
   }
 }
-void printTree(AVLTree *tree) {
-  print2DUtil(tree->parent, 0);
-}
 
-// Function to print binary tree in 2D
-// It does reverse inorder traversal
-// https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/
-static void print2DUtil(NodeTree *parent, int space){
-  int COUNT = 6;
-  // Base case
-  if (parent == NULL)
-    return;
 
-  // Increase distance between levels
-  space += COUNT;
-
-  // Process right child first
-  print2DUtil(parent->right, space);
-
-  // Print current node after space
-  // count
-  printf("\n");
-  for (int i = COUNT; i < space; i++)
-    printf(" ");
-  // printf("%s\n", getName(parent->account));
-  printf("%s\n", getName(parent->game));
-  //int getCPF_tests(CPF *c);
-
-  // Process left child
-  print2DUtil(parent->left, space);
-}

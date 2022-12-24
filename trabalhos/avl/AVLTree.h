@@ -1,23 +1,9 @@
-#ifndef _AVLTree_
-#define _AVLTree_
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
+#ifndef _avl_tree_
+#define _avl_tree_
 #include "Game.h"
 
 typedef struct AVL_TREE AVLTree;
-typedef struct NODE_TREE NodeTree;
-
-AVLTree * buildTree();
-
-void insert(AVLTree * tree, Game * game);
-void traverse(AVLTree *tree, int traverseType);
-
-// void remove(Tree * tree);
-
-void deleteTree(AVLTree * tree);
-
-void printTree(AVLTree *tree);
+AVLTree * newTree ();
+void deleteTree (AVLTree * tree);
+void traverse (AVLTree * tree, int transverseType);
 #endif

@@ -16,9 +16,10 @@ typedef struct GAME Game;
 Game * newGame();
 
 char * getName(Game * game);
+int getYear(Game * game);
 
 void deleteGame(Game * game);
 void printGame(Game * game);
 
-boolean compare(Game * game1, Game * game2);
+boolean isGreater(Game * game1, Game * game2);
 #endif
