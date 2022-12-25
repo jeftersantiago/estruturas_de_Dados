@@ -39,13 +39,12 @@ AVLTree * newTree () {
 
   char line[200];
   Game * game =  NULL;
-  int i = 0;
 
-  while(fgets(line, 200, file)){
+  while(fgets(line, 200, file) != NULL){
     game = newGame(line);
     insert(tree, game);
-    i++;
   }
+
   fclose(file);
   return tree;
 }
@@ -128,9 +127,7 @@ Node * insertNode (Node * node, Game * game, int * flag) {
           node->balance = 1;
           *flag = 1;
           break;
-          /* Caso com desbalanceamento.
-             node->height > 1
-           */
+          /* Caso com desbalanceamento. node->height > 1 */
         case 1:
           /* Caso: Rotacao simples */
           if(node->left->balance == 1) {
@@ -386,21 +383,13 @@ void removeGame (AVLTree * tree, Game * game) {
   tree->parent = removeNode(tree->parent, game, &flag);
 }
 
-void traverse(AVLTree *tree, int traverseType){
-  switch(traverseType){
-  case 1:
-    printf("Preorder traversal\n\n");
+void traverse(AVLTree * tree, int traverseType){
+  if(traverseType == 1)
     preorder_traversal(tree->parent);
-    break;
-  case 2:
-    printf("Inorder traversal\n\n");
+  else if(traverseType == 2)
     inorder_traversal(tree->parent);
-    break;
-  case 3:
-    printf("Postorder traversal\n\n");
+  else if(traverseType == 3)
     postorder_traversal(tree->parent);
-    break;
-  }
 }
 
 static void preorder_traversal(Node *node){
@@ -413,16 +402,16 @@ static void preorder_traversal(Node *node){
 
 static void inorder_traversal(Node *node){
     if(node != NULL){
-        preorder_traversal(node->left);
+        inorder_traversal(node->left);
         printGame(node->game);
-        preorder_traversal(node->right);
+        inorder_traversal(node->right);
     }
 }
 
 static void postorder_traversal(Node *node){
     if(node != NULL){
-        preorder_traversal(node->left);
-        preorder_traversal(node->right);
+        postorder_traversal(node->left);
+        postorder_traversal(node->right);
         printGame(node->game);
     }
 }

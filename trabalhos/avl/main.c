@@ -8,7 +8,6 @@ int main ()  {
 
   AVLTree * tree = newTree();
 
-  /**
   int traverseType;
   scanf("%d\n", &traverseType);
 
@@ -20,8 +19,6 @@ int main ()  {
     year = atoi(line);
     game = searchGame(tree, year);
 
-//  if(game == NULL)
-//    printf("GAME NOT FOUND!\n");
     
     while(game != NULL){
       removeGame(tree, game);
@@ -31,11 +28,10 @@ int main ()  {
     line = readLine();
   }
   free(line);
-  **/
 
-  traverse(tree, 2); //traverseType);
+  traverse(tree, traverseType);
 
-  //  print_b_tree(tree);
+  // print_b_tree(tree);
 
   deleteTree(tree);
   return 0;

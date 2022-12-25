@@ -13,7 +13,7 @@
 
 typedef struct GAME Game;
 
-Game * newGame();
+Game * newGame(char * line);
 
 char * getName(Game * game);
 int getYear(Game * game);

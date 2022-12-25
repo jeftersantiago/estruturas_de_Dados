@@ -12,8 +12,5 @@ void removeGame (AVLTree * tree, Game * game);
 
 void deleteTree (AVLTree * tree);
 void traverse (AVLTree * tree, int trasverseType);
-
-
 void print_b_tree(AVLTree  *tree);
-
 #endif

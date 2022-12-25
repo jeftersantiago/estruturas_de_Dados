@@ -3,7 +3,7 @@
 struct GAME {
   char * name;
   int year;
-  char * developer; 
+  char * developer;
 };
 
 Game * newGame (char * line) {
@@ -35,9 +35,9 @@ char *getName(Game * game){
 int getYear(Game * game) { return game->year; }
 
 void printGame(Game * game){
-  // printf("%s, %d\n", game->name, game->year);
-  // printf("%s\n", game->name);
-  printf("%d\n", game->year);
+  //  printf("%s, %d\n", game->name, game->year);
+  printf("%s\n", game->name);
+  // printf("%d\n", game->year);
 }
 
 void deleteGame(Game * game){
