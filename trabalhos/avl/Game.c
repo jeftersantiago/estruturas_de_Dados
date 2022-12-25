@@ -33,10 +33,11 @@ char *getName(Game * game){
   return game->name;
 }
 int getYear(Game * game) { return game->year; }
+
 void printGame(Game * game){
-  //  printf("%s, %d\n", game->name, game->year);
-  //  printf("%s %d %s", game->name, game->year, game->developer);
-  printf("%s\n", game->name);
+  // printf("%s, %d\n", game->name, game->year);
+  // printf("%s\n", game->name);
+  printf("%d\n", game->year);
 }
 
 void deleteGame(Game * game){
@@ -51,8 +52,9 @@ void deleteGame(Game * game){
   strcmp(name1, name2) < 0;
   Se name1 > name2 => returna true
  */
+
 boolean isGreater(Game * game1, Game * game2){
-  if(game1->year == game2->year)
-    return strcmp(game1->name, game2->name) < 0;
-  return game1->year > game2->year;
+  if(game1->year != game2->year)
+    return game1->year > game2->year;
+  return strcmp(game1->name, game2->name) > 0;
 }

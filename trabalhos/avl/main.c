@@ -6,15 +6,36 @@ char *readLine();
 
 int main ()  {
 
-
-  //  if(strcmp("A Plague Tale: Innocence", "Assassin's Creed") < 0){
-  //    printf("Sim é menor\n");
-  //  }
   AVLTree * tree = newTree();
+
+  /**
   int traverseType;
   scanf("%d\n", &traverseType);
 
-  traverse(tree, traverseType);
+  char * line = readLine();
+  int year = -1;
+
+  Game * game  = NULL;
+  while(strcmp(line, "F") != 0){
+    year = atoi(line);
+    game = searchGame(tree, year);
+
+//  if(game == NULL)
+//    printf("GAME NOT FOUND!\n");
+    
+    while(game != NULL){
+      removeGame(tree, game);
+      game = searchGame(tree, year);
+    }
+
+    line = readLine();
+  }
+  free(line);
+  **/
+
+  traverse(tree, 2); //traverseType);
+
+  //  print_b_tree(tree);
 
   deleteTree(tree);
   return 0;
@@ -37,3 +58,4 @@ char *readLine() {
     string[index - 1] = '\0';
     return string;
 }
+
