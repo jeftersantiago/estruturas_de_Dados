@@ -1,7 +1,6 @@
 #include "AVLTree.h"
 typedef struct NODE Node;
 
-
 static void preorder_traversal(Node *node);
 static void inorder_traversal(Node *node);
 static void postorder_traversal(Node *node);
@@ -9,8 +8,9 @@ static void postorder_traversal(Node *node);
 static Node  * leftRotate (Node * node) ;
 static Node  * rightRotate (Node * node) ;
 static Node * insertNode (Node * node, Game * game, int * flag);
-static void insert (AVLTree * tree, Game * game);
 static Node * removeNode (Node * node, Game * game, int * h);
+static void delete_node(Node * node);
+static void insert (AVLTree * tree, Game * game);
 
 struct NODE {
   Node * left;
@@ -246,8 +246,7 @@ static Node * rightBalance (Node * node, int * h) {
     }
     else {
       /* Rotacao dupla Esquerda/Direita */
-      node->left = leftRotate(node->left);
-      node = rightRotate(node);
+      node = leftRightRotate(node);
       if(node->balance == 1) {
         node->left->balance =  0;
         node->right->balance = -1;
@@ -295,8 +294,7 @@ static Node * leftBalance (Node * node, int * h) {
     }
     else {
       /* Rotacao dupla Direita/Esquerda */
-      node->right = rightRotate(node->right);
-      node = leftRotate(node);
+      node = rightLeftRotate(node);
       if(node->balance == 1) {
         node->left->balance = 0 ;
         node->right->balance = -1;
@@ -325,6 +323,7 @@ Node * searchAndRemove (Node * p, Node * node, int * h){
       p = rightBalance(p, h);
   }
   else {
+    deleteGame(node->game);
     node->game = p->game;
     aux = p;
     p = p->left;
@@ -357,6 +356,7 @@ static Node * removeNode (Node * node, Game * game, int * h) {
     if(node->right == NULL) {
       aux = node;
       node = node->left;
+      deleteGame(aux->game);
       free(aux);
       *h = 1;
     }
@@ -364,6 +364,7 @@ static Node * removeNode (Node * node, Game * game, int * h) {
     else if (node->left == NULL) {
       aux = node;
       node = node->right;
+      deleteGame(aux->game);
       free(aux);
       *h = 1;
     }
@@ -425,6 +426,7 @@ static void delete_node(Node * node){
     auxRight = node->right;
 
     deleteGame(node->game);
+
     free(node);
     
     delete_node(auxLeft);
@@ -442,9 +444,8 @@ void deleteTree(AVLTree * tree){
   }
 }
 
-// Function to print binary tree in 2D
-// It does reverse inorder traversal
-// https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/
+/* Funcoes de teste */
+
 static void print2DUtil(Node *parent, int space)
 {
   int COUNT = 6;
@@ -476,4 +477,3 @@ void print_b_tree(AVLTree  *tree)
     // Pass initial space count as 0
     print2DUtil(tree->parent, 0);
 }
-

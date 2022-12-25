@@ -20,10 +20,9 @@ Account *createAccount(char *str) {
       int age = atoi(strsep(&str, ";"));
 
       float balance = atof(str);
+
       size_t length = strlen(name);
-
       account->name = (char *) malloc(sizeof(char *) * (int) length);
-
       strcpy(account->name, name);
 
       account->cpf = newCPF(cpf); 

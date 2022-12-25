@@ -34,7 +34,7 @@ int main(){
 			scanf("%d\n",&year);
 			addGame(catalogo,newGame(name,developer,year));
 		}
-	} while(strcmp(name,"F")!=0);
+	} while(strcmp(name,"F") != 0);
 
 	char option;
 

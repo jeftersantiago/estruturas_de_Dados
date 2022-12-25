@@ -6,33 +6,35 @@ char *readLine();
 
 int main ()  {
 
-  AVLTree * tree = newTree();
-
+  AVLTree * tree;
+  Game * game;
+  char * line;
+  int year;
   int traverseType;
+
+  tree = newTree();
+
   scanf("%d\n", &traverseType);
 
-  char * line = readLine();
-  int year = -1;
+  year = -1;
+  game = NULL;
+  line =  readLine(); 
 
-  Game * game  = NULL;
   while(strcmp(line, "F") != 0){
+
     year = atoi(line);
     game = searchGame(tree, year);
 
-    
     while(game != NULL){
       removeGame(tree, game);
       game = searchGame(tree, year);
     }
-
+    free(line); line = NULL;
     line = readLine();
-  }
-  free(line);
-
+  } 
+  free(line); 
   traverse(tree, traverseType);
-
   // print_b_tree(tree);
-
   deleteTree(tree);
   return 0;
 }

@@ -41,9 +41,11 @@ void printGame(Game * game){
 }
 
 void deleteGame(Game * game){
-  free(game->name);
-  free(game->developer);
-  free(game);
+  if(game != NULL){
+    free(game->name);
+    free(game->developer);
+    free(game);
+  }
 }
 
 /*
